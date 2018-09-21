@@ -15,6 +15,6 @@ class QuizController extends AbstractController
 {
     public function home()
     {
-        return $this->render('home.html.twig');
+        return $this->render('test.html.twig');
     }
 }

@@ -1,0 +1,122 @@
+:root {
+    --light-grey: #FAFAFA;
+    --intense-blue: #81BEF7;
+    --font-grey: #444;
+    --font-hover: #000;
+}
+
+@import "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--light-grey);
+    font-family: Arial;
+    font-weight: 400;
+}
+
+.login-box {
+    width: 280px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--font-grey);
+}
+
+.login-box h1{
+    font-size: 40px;
+    border-bottom: 3px solid var(--intense-blue);
+    margin-bottom: 50px;
+    padding: 13px 0;
+}
+
+.textbox {
+    width: 100%;
+    overflow: hidden;
+    font-size: 20px;
+    padding: 8px 0;
+    margin: 8px 0;
+    border-bottom: 1px solid var(--intense-blue);
+}
+
+.textbox i {
+    width: 26px;
+    float: left;
+    text-align: center;
+}
+
+.textbox input {
+    border: none;
+    outline: none;
+    background: none;
+    color: var(--font-grey);
+    font-size: 18px;
+    width: 80%;
+    float: left;
+    margin: 0 10px;
+}
+
+.login-button {
+    width: 100%;
+    background: none;
+    border: 2px solid var(--intense-blue);
+    color: var(--font-grey);
+    padding: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 12px 0;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+header {
+    background: var(--intense-blue);
+}
+
+header::after{
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.logo {
+    max-height: 100px;
+    max-width: 100px;
+    width: 100px;
+    height: 100px;
+    float: left;
+    padding: 10px 0;
+}
+
+nav {
+    float: right;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 70px;
+    padding-top: 50px;
+
+    position: relative;
+}
+
+nav a {
+    color: var(--font-grey);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 20px;
+}
+
+nav a:hover {
+    color: var(--font-hover);
+}
