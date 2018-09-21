@@ -1,0 +1,7 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+welcome:
+  path: /home
+  controller: App\Controller\QuizController::home
