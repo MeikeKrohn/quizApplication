@@ -22,7 +22,7 @@ class quizAppFixtures extends Fixture
         $dummyUser->setEmail('meike.krohn@dummy.com');
         $dummyUser->setFirstname('Meike');
         $dummyUser->setLastname('Krohn');
-        $dummyUser->setRole('student');
+        $dummyUser->setRole('ROLE_STUDENT');
         $dummyUser->setPassword(password_hash('test', PASSWORD_BCRYPT));
         $dummyUser->setUsername('meike1401');
 

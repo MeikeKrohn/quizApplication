@@ -9,5 +9,5 @@ home:
 login:
   path: /login
 
-#logout:
-#  path: /logout
+logout:
+  path: /logout
