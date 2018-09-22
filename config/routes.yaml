@@ -6,6 +6,10 @@ home:
   path: /home
   controller: App\Controller\QuizController::home
 
+createQuestion:
+  path: /teacher/question
+  controller: App\Controller\QuizController::createQuestion
+
 login:
   path: /login
 

@@ -3,14 +3,14 @@
 {% block body %}
     <header>
         <div class="container">
-            <img src="logo.png" alt=logo" class="logo">
+            <a href="{{ path('home') }}"><img src="{{ asset('images/logo.png') }}" alt=logo" class="logo" /></a>
             <nav>
                 <ul>
                     {% if activeUser.role == 'ROLE_STUDENT' %}
                         <li><a href="#">Available Exams</a></li>
                         <li><a href="#">Completed Exams</a></li>
                     {% else %}
-                        <li><a href="#">Questions</a></li>
+                        <li><a href="{{ path('createQuestion') }}">Questions</a></li>
                         <li><a href="#">Exams</a></li>
                         <li><a href="#">Results</a></li>
                     {% endif %}

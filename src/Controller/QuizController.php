@@ -18,7 +18,13 @@ class QuizController extends AbstractController
     {
         $activeUser = $this->getUser();
 
-
         return $this->render('home.html.twig', array('activeUser' => $activeUser));
+    }
+
+    public function createQuestion()
+    {
+        $activeUser = $this->getUser();
+
+        return $this->render('teacher/createQuestion.html.twig', array('activeUser' => $activeUser));
     }
 }
