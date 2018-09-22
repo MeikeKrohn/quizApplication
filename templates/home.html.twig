@@ -1,5 +1,11 @@
-That's a Template.
+{% extends 'baseLoggedIn.html.twig' %}
 
-<div>
-    <a href="{{ path('logout') }}">Logout</a>
-</div>
+{% block content %}
+    <div align="center">
+        <h3>Welcome to ExamIt</h3>
+
+        <p>
+            Hello {{ activeUser.firstname }},<br>check your pending exams.
+        </p>
+    </div>
+{% endblock %}

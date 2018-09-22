@@ -9,12 +9,16 @@
 namespace App\Controller;
 
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class QuizController extends AbstractController
 {
     public function home()
     {
-        return $this->render('test.html.twig');
+        $activeUser = $this->getUser();
+
+
+        return $this->render('home.html.twig', array('activeUser' => $activeUser));
     }
 }

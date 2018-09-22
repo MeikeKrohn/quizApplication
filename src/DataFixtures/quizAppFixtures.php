@@ -18,15 +18,24 @@ class quizAppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $dummyUser = new User();
-        $dummyUser->setEmail('meike.krohn@dummy.com');
-        $dummyUser->setFirstname('Meike');
-        $dummyUser->setLastname('Krohn');
-        $dummyUser->setRole('ROLE_STUDENT');
-        $dummyUser->setPassword(password_hash('test', PASSWORD_BCRYPT));
-        $dummyUser->setUsername('meike1401');
+        $dummyStudent = new User();
+        $dummyStudent->setEmail('student@dummy.com');
+        $dummyStudent->setFirstname('Meike');
+        $dummyStudent->setLastname('Krohn');
+        $dummyStudent->setRole('ROLE_STUDENT');
+        $dummyStudent->setPassword(password_hash('test', PASSWORD_BCRYPT));
+        $dummyStudent->setUsername('meike1401');
+        $manager->persist($dummyStudent);
 
-        $manager->persist($dummyUser);
+        $dummyTeacher = new User();
+        $dummyTeacher->setEmail('teacher@dummy.com');
+        $dummyTeacher->setFirstname('Hans');
+        $dummyTeacher->setLastname('Günther');
+        $dummyTeacher->setRole('ROLE_TEACHER');
+        $dummyTeacher->setPassword(password_hash('test', PASSWORD_BCRYPT));
+        $dummyTeacher->setUsername('hans1001');
+        $manager->persist($dummyTeacher);
+
         $manager->flush();
     }
 }

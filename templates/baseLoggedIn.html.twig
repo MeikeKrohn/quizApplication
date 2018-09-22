@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <header>
+        <div class="container">
+            <img src="logo.png" alt=logo" class="logo">
+            <nav>
+                <ul>
+                    {% if activeUser.role == 'ROLE_STUDENT' %}
+                        <li><a href="#">Available Exams</a></li>
+                        <li><a href="#">Completed Exams</a></li>
+                    {% else %}
+                        <li><a href="#">Questions</a></li>
+                        <li><a href="#">Exams</a></li>
+                        <li><a href="#">Results</a></li>
+                    {% endif %}
+                    <li><a href="{{ path('logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    {% block content %} {% endblock %}
+{% endblock %}

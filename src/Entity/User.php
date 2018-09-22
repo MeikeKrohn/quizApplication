@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -46,6 +48,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $role;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Exam", mappedBy="owner", orphanRemoval=true)
+     */
+    private $exams;
+
+    public function __construct()
+    {
+        $this->exams = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -166,5 +178,36 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * @return Collection|Exam[]
+     */
+    public function getExams(): Collection
+    {
+        return $this->exams;
+    }
+
+    public function addExam(Exam $exam): self
+    {
+        if (!$this->exams->contains($exam)) {
+            $this->exams[] = $exam;
+            $exam->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExam(Exam $exam): self
+    {
+        if ($this->exams->contains($exam)) {
+            $this->exams->removeElement($exam);
+            // set the owning side to null (unless already changed)
+            if ($exam->getOwner() === $this) {
+                $exam->setOwner(null);
+            }
+        }
+
+        return $this;
     }
 }
