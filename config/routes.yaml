@@ -6,9 +6,9 @@ home:
   path: /home
   controller: App\Controller\QuizController::home
 
-createQuestion:
+listQuestions:
   path: /teacher/question
-  controller: App\Controller\QuizController::createQuestion
+  controller: App\Controller\QuizController::listQuestions
 
 login:
   path: /login

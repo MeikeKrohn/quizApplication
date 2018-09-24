@@ -21,11 +21,16 @@ class Question
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $question;
+    private $questionText;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Exam", inversedBy="questions")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="questions")
      * @ORM\JoinColumn(nullable=false)
+     */
+    private $owner;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Exam", inversedBy="questions")
      */
     private $exam;
 
@@ -36,6 +41,7 @@ class Question
 
     public function __construct()
     {
+        $this->exam = new ArrayCollection();
         $this->answers = new ArrayCollection();
     }
 
@@ -44,26 +50,52 @@ class Question
         return $this->id;
     }
 
-    public function getQuestion(): ?string
+    public function getQuestionText(): ?string
     {
-        return $this->question;
+        return $this->questionText;
     }
 
-    public function setQuestion(string $question): self
+    public function setQuestionText(string $questionText): self
     {
-        $this->question = $question;
+        $this->questionText = $questionText;
 
         return $this;
     }
 
-    public function getExam(): ?Exam
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Exam[]
+     */
+    public function getExam(): Collection
     {
         return $this->exam;
     }
 
-    public function setExam(?Exam $exam): self
+    public function addExam(Exam $exam): self
     {
-        $this->exam = $exam;
+        if (!$this->exam->contains($exam)) {
+            $this->exam[] = $exam;
+        }
+
+        return $this;
+    }
+
+    public function removeExam(Exam $exam): self
+    {
+        if ($this->exam->contains($exam)) {
+            $this->exam->removeElement($exam);
+        }
 
         return $this;
     }

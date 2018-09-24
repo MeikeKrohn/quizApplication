@@ -26,11 +26,6 @@ class Exam
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $description;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $category;
 
     /**
@@ -40,13 +35,12 @@ class Exam
     private $owner;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="exams")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity="App\Entity\UserExam", mappedBy="exam", orphanRemoval=true)
      */
-    private $student;
+    private $userExams;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="exam", orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\Question", mappedBy="exam")
      */
     private $questions;
 
@@ -68,18 +62,6 @@ class Exam
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }
@@ -108,14 +90,33 @@ class Exam
         return $this;
     }
 
-    public function getStudent(): ?User
+    /**
+     * @return Collection|UserExam[]
+     */
+    public function getUserExams(): Collection
     {
-        return $this->student;
+        return $this->userExams;
     }
 
-    public function setStudent(?User $student): self
+    public function addUserExam(UserExam $userExam): self
     {
-        $this->student = $student;
+        if (!$this->userExams->contains($userExam)) {
+            $this->userExams[] = $userExam;
+            $userExam->setExam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserExam(UserExam $userExam): self
+    {
+        if ($this->userExams->contains($userExam)) {
+            $this->userExams->removeElement($userExam);
+            // set the owning side to null (unless already changed)
+            if ($userExam->getExam() === $this) {
+                $userExam->setExam(null);
+            }
+        }
 
         return $this;
     }
@@ -132,7 +133,7 @@ class Exam
     {
         if (!$this->questions->contains($question)) {
             $this->questions[] = $question;
-            $question->setExam($this);
+            $question->addExam($this);
         }
 
         return $this;
@@ -142,12 +143,10 @@ class Exam
     {
         if ($this->questions->contains($question)) {
             $this->questions->removeElement($question);
-            // set the owning side to null (unless already changed)
-            if ($question->getExam() === $this) {
-                $question->setExam(null);
-            }
+            $question->removeExam($this);
         }
 
         return $this;
     }
+
 }

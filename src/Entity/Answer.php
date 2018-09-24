@@ -27,11 +27,6 @@ class Answer
     private $isCorrect;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isChosen;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Question", inversedBy="answers")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -62,18 +57,6 @@ class Answer
     public function setIsCorrect(bool $isCorrect): self
     {
         $this->isCorrect = $isCorrect;
-
-        return $this;
-    }
-
-    public function getIsChosen(): ?bool
-    {
-        return $this->isChosen;
-    }
-
-    public function setIsChosen(bool $isChosen): self
-    {
-        $this->isChosen = $isChosen;
 
         return $this;
     }

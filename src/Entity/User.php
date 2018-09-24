@@ -54,9 +54,19 @@ class User implements UserInterface
      */
     private $exams;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserExam", mappedBy="user", orphanRemoval=true)
+     */
+    private $userExams;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="owner", orphanRemoval=true)
+     */
+    private $questions;
+
     public function __construct()
     {
-        $this->exams = new ArrayCollection();
+        $this->questions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -210,4 +220,67 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|UserExam[]
+     */
+    public function getUserExams(): Collection
+    {
+        return $this->userExams;
+    }
+
+    public function addUserExam(UserExam $userExam): self
+    {
+        if (!$this->userExams->contains($userExam)) {
+            $this->userExams[] = $userExam;
+            $userExam->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserExam(UserExam $userExam): self
+    {
+        if ($this->userExams->contains($userExam)) {
+            $this->userExams->removeElement($userExam);
+            // set the owning side to null (unless already changed)
+            if ($userExam->getUser() === $this) {
+                $userExam->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Question[]
+     */
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
+
+    public function addQuestion(Question $question): self
+    {
+        if (!$this->questions->contains($question)) {
+            $this->questions[] = $question;
+            $question->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestion(Question $question): self
+    {
+        if ($this->questions->contains($question)) {
+            $this->questions->removeElement($question);
+            // set the owning side to null (unless already changed)
+            if ($question->getOwner() === $this) {
+                $question->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

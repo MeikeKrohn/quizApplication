@@ -9,6 +9,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Question;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -21,10 +22,14 @@ class QuizController extends AbstractController
         return $this->render('home.html.twig', array('activeUser' => $activeUser));
     }
 
-    public function createQuestion()
+    public function listQuestions()
     {
         $activeUser = $this->getUser();
 
-        return $this->render('teacher/createQuestion.html.twig', array('activeUser' => $activeUser));
+        $questions = $this->getDoctrine()
+            ->getRepository(Question::class)->findBy(array('owner' => $activeUser));
+
+
+        return $this->render('teacher/listQuestions.html.twig', array('activeUser' => $activeUser, 'questions' => $questions));
     }
 }

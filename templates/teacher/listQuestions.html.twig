@@ -1,0 +1,30 @@
+{% extends 'baseLoggedIn.html.twig' %}
+
+{% block content %}
+
+        <div class="question-list">
+            <h1>Your Questions</h1>
+
+            {% for q in questions %}
+
+            <details>
+                <summary>Kategorie: Physik</summary>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>bla</td>
+                            <td><a href="#">Edit</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </details>
+
+            {% endfor %}
+
+{% endblock %}

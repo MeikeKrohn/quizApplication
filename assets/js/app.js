@@ -12,3 +12,9 @@ require('../css/app.css');
 // var $ = require('jquery');
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+
+
+var myButton = document.getElementById("myButton");
+myButton.onclick = function() {
+    console.log("Hallo");
+}

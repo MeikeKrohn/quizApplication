@@ -9,6 +9,7 @@
 namespace App\DataFixtures;
 
 
+use App\Entity\Question;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -35,6 +36,11 @@ class quizAppFixtures extends Fixture
         $dummyTeacher->setPassword(password_hash('test', PASSWORD_BCRYPT));
         $dummyTeacher->setUsername('hans1001');
         $manager->persist($dummyTeacher);
+
+        $question1 = new Question();
+        $question1->setOwner($dummyTeacher);
+        $question1->setQuestionText("Was ist 1x1?");
+        $manager->persist($question1);
 
         $manager->flush();
     }
