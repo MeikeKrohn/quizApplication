@@ -91,7 +91,8 @@ header::after{
     background: var(--dark-orange);
 }
 
-.smallOrangeButton {
+.editButton,
+.deleteButton {
     width: 70px;
     background: var(--orange);
     border: 1.5px solid var(--dark-grey);
@@ -102,7 +103,8 @@ header::after{
     font-weight: bold;
 }
 
-.smallOrangeButton:hover {
+.editButton:hover,
+.deleteButton:hover {
     background: var(--dark-orange);
 }
 

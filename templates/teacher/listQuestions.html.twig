@@ -6,7 +6,7 @@
     </div>
 
     <div class="actionFieldTop">
-        <input type="button" class="orangeButton" onclick="location.href='{{ path('createQuestion') }}';" value="Add new Question" />
+        <input type="button" class="orangeButton" onclick="location.href='{{ path('createQuestionForm') }}';" value="Add new Question" />
     </div>
 
     <div class="questionList">
@@ -27,8 +27,8 @@
                         <tr>
                             <td>{{ q.questionText }}</td>
                             <td>
-                                <button class="smallOrangeButton" data-id="{{ q.id }}" class="editButton">Edit</button>
-                                <button class="smallOrangeButton" data-id="{{ q.id }}" class="deleteButton">Delete</button>
+                                <button data-id="{{ q.id }}" class="editButton">Edit</button>
+                                <button data-id="{{ q.id }}" class="deleteButton">Delete</button>
                             </td>
                         </tr>
                         {% endif %}
@@ -38,7 +38,5 @@
     </details>
         {% endfor %}
     </div>
-
-
 
 {% endblock %}

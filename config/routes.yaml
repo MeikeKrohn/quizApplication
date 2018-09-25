@@ -10,9 +10,14 @@ listQuestions:
   path: /teacher/question
   controller: App\Controller\QuizController::listQuestions
 
-createQuestion:
+createQuestionForm:
   path: /teacher/question/create
-  controller: App\Controller\QuizController::createQuestion
+  controller: App\Controller\QuizController::createQuestionForm
+
+deleteQuestion:
+   path: /teacher/question/delete/{questionId}
+   controller: App\Controller\QuizController::deleteQuestion
+   methods: [DELETE]
 
 login:
   path: /login

@@ -11,49 +11,9 @@
     </div>
 
     <div class="createQuestionForm">
-        <form>
-            <p>
-                <label>Choose category:</label>
-                    <select>
-                        {% for c in categories %}
-                        <option value="{{ c.id }}">{{ c.name }}</option>
-                        {% endfor %}
-                    </select>
-            </p>
-            <p>
-                <label>Question:</label>
-                <input type="text" placeholder="Type your question here..." id="questionText" name="questionText" />
-            </p>
-
-            <div id="answers">
-            <p>
-                <label>Answer 1:</label>
-                <input type="text" placeholder="Type an answer here..." id="answer1" name="group1" />
-
-                <input type="radio" id="isCorrect1" value="correctAnswer" name="group1" checked="checked" />
-                <label for="isCorrect1">Is Correct</label>
-
-                <input type="radio" id="isWrong1" value="wrongAnswer" name="group1" />
-                <label for="isWrong1">Is Wrong</label>
-            </p>
-            <p>
-                <label>Answer 2:</label>
-                <input type="text" placeholder="Type an answer here..." id="answer2" name="group2" />
-
-                <input type="radio" id="isCorrect2" value="correctAnswer" name="group2" checked="checked" />
-                <label for="isCorrect2">Is Correct</label>
-
-                <input type="radio" id="isWrong2" value="wrongAnswer" name="group2" />
-                <label for="isWrong2">Is Wrong</label>
-            </p>
-            </div>
-            <p>
-                <input type="button" class="addAnswersButton" value="Add answer" id="add" />
-            </p>
-            <p>
-                <input type="submit" value="Save question">
-            </p>
-        </form>
+        {{ form_start(addNewQuestionForm) }}
+        {{ form_widget(addNewQuestionForm) }}
+        {{ form_end(addNewQuestionForm) }}
     </div>
 
 
