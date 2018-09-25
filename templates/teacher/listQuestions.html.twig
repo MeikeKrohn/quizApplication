@@ -1,30 +1,44 @@
 {% extends 'baseLoggedIn.html.twig' %}
 
 {% block content %}
+    <div class="caption">
+        Your questions
+    </div>
 
-        <div class="question-list">
-            <h1>Your Questions</h1>
+    <div class="actionFieldTop">
+        <input type="button" class="orangeButton" onclick="location.href='{{ path('createQuestion') }}';" value="Add new Question" />
+    </div>
 
-            {% for q in questions %}
+    <div class="questionList">
+        {% for c in categories %}
+    <details>
+        <summary>{{ c.name }}</summary>
 
-            <details>
-                <summary>Kategorie: Physik</summary>
-                <table>
-                    <thead>
+            <table class="questionListTable">
+                <thead>
+                <tr>
+                    <th style="width: 70%">Question</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for q in questions %}
+                        {% if c.id == q.category.id %}
                         <tr>
-                            <th>Question</th>
-                            <th>Actions</th>
+                            <td>{{ q.questionText }}</td>
+                            <td>
+                                <button class="smallOrangeButton" data-id="{{ q.id }}" class="editButton">Edit</button>
+                                <button class="smallOrangeButton" data-id="{{ q.id }}" class="deleteButton">Delete</button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>bla</td>
-                            <td><a href="#">Edit</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </details>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+    </details>
+        {% endfor %}
+    </div>
 
-            {% endfor %}
+
 
 {% endblock %}

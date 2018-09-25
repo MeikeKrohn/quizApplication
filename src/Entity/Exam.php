@@ -24,11 +24,6 @@ class Exam
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $category;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="exams")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -43,6 +38,12 @@ class Exam
      * @ORM\ManyToMany(targetEntity="App\Entity\Question", mappedBy="exam")
      */
     private $questions;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="exams")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
 
     public function __construct()
     {
@@ -62,18 +63,6 @@ class Exam
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getCategory(): ?string
-    {
-        return $this->category;
-    }
-
-    public function setCategory(string $category): self
-    {
-        $this->category = $category;
 
         return $this;
     }
@@ -145,6 +134,18 @@ class Exam
             $this->questions->removeElement($question);
             $question->removeExam($this);
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

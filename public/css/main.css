@@ -1,7 +1,12 @@
 :root {
     --light-grey: #FAFAFA;
-    --intense-blue: #81BEF7;
-    --font-grey: #444;
+    --intense-blue: #76C7F2;
+    --light-blue: #D1E5F9;
+    --orange: #FFBCB7;
+    --dark-orange: #E8ABA7;
+    --yellow: #FFF7D1;
+    --turquoise: #D8FFFA;
+    --dark-grey: #444;
     --font-hover: #000;
 }
 
@@ -11,6 +16,7 @@ body {
     background: var(--light-grey);
     font-family: Arial;
     font-weight: 400;
+    font-size: 16px;
 }
 
 .login-box {
@@ -19,7 +25,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: var(--font-grey);
+    color: var(--dark-grey);
 }
 
 .login-box h1{
@@ -48,22 +54,11 @@ body {
     border: none;
     outline: none;
     background: none;
-    color: var(--font-grey);
+    color: var(--dark-grey);
     font-size: 18px;
     width: 80%;
     float: left;
     margin: 0 10px;
-}
-
-.login-button {
-    width: 100%;
-    background: none;
-    border: 2px solid var(--intense-blue);
-    color: var(--font-grey);
-    padding: 5px;
-    font-size: 18px;
-    cursor: pointer;
-    margin: 12px 0;
 }
 
 .container {
@@ -79,6 +74,36 @@ header::after{
     content: '';
     display: table;
     clear: both;
+}
+
+.orangeButton {
+    width: 170px;
+    background: var(--orange);
+    border: 1.5px solid var(--dark-grey);
+    color: var(--dark-grey);
+    padding: 5px;
+    cursor: pointer;
+    margin: 12px 0;
+    font-weight: bold;
+}
+
+.orangeButton:hover {
+    background: var(--dark-orange);
+}
+
+.smallOrangeButton {
+    width: 70px;
+    background: var(--orange);
+    border: 1.5px solid var(--dark-grey);
+    color: var(--dark-grey);
+    padding: 5px;
+    cursor: pointer;
+    margin: 12px 0;
+    font-weight: bold;
+}
+
+.smallOrangeButton:hover {
+    background: var(--dark-orange);
 }
 
 .logo {
@@ -109,7 +134,7 @@ nav li {
 }
 
 nav a {
-    color: var(--font-grey);
+    color: var(--dark-grey);
     text-decoration: none;
     text-transform: uppercase;
     font-size: 20px;
@@ -117,4 +142,47 @@ nav a {
 
 nav a:hover {
     color: var(--font-hover);
+}
+
+
+.caption {
+    height: 70px;
+    display: flex;
+    margin-left: 110px;
+    padding-top: 30px;
+    color: var(--dark-grey);
+    font-size: 40px;
+}
+
+.actionFieldTop {
+    height: 50px;
+    margin-left: 110px;
+    padding-top: 5px;
+}
+
+summary {
+    font-size: 20px;
+    cursor: pointer;
+    margin: 10px 10px 0 0 ;
+}
+
+.questionList {
+    margin-left: 110px;
+    padding-top: 30px;
+}
+
+.questionListTable {
+    width: 90%;
+}
+
+.questionListTable thead {
+    height: 50px;
+    text-align: left;
+    font-size: 18px;
+}
+
+.questionListTable td {
+    height: 30px;
+    padding: 5px 5px 0 0;
+    text-align: left;
 }

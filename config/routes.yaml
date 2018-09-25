@@ -10,6 +10,10 @@ listQuestions:
   path: /teacher/question
   controller: App\Controller\QuizController::listQuestions
 
+createQuestion:
+  path: /teacher/question/create
+  controller: App\Controller\QuizController::createQuestion
+
 login:
   path: /login
 
