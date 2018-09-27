@@ -1,0 +1,30 @@
+{% extends 'baseLoggedIn.html.twig' %}
+
+{% block content %}
+
+    <div class="caption">
+        Question Editor
+    </div>
+
+    <div class="actionFieldTop">
+        Please, edit the question below.
+    </div>
+
+    <div class="editQuestionForm">
+        {{ form_start(form) }}
+        {{ form_row(form.category) }}
+        {{ form_row(form.questionText) }}
+
+        Answers:
+        <ul class="answers" data-prototype="{{ form_widget(form.answers.vars.prototype)|e('html_attr') }}">
+            {% for answer in answers %}
+                {{ form_widget(form.answers) }}
+                <button style="width: 40px" data-id="{{ answer.id }}" class="deleteQuestionButton">&#215</button>
+            {% endfor %}
+        </ul>
+
+        {{ form_end(form) }}
+
+    </div>
+
+{% endblock %}

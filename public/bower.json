@@ -1,0 +1,21 @@
+{
+  "name": "public",
+  "homepage": "https://github.com/MeikeKrohn/quizApplication",
+  "authors": [
+    "MeikeKrohn <mk261@hdm-stuttgart.de>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/assets/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.3.1"
+  }
+}

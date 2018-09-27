@@ -9,6 +9,7 @@
 namespace App\DataFixtures;
 
 
+use App\Entity\Answer;
 use App\Entity\Category;
 use App\Entity\Question;
 use App\Entity\User;
@@ -63,6 +64,18 @@ class quizAppFixtures extends Fixture
         $question3->setQuestionText("Was ist ein endoplasmatisches Retikulum?");
         $question3->setCategory($category2);
         $manager->persist($question3);
+
+        $answer1 = new Answer();
+        $answer1->setAnswerText("1941");
+        $answer1->setIsCorrect(false);
+        $answer1->setQuestion($question2);
+        $manager->persist($answer1);
+
+        $answer2 = new Answer();
+        $answer2->setAnswerText("1945");
+        $answer2->setIsCorrect(true);
+        $answer2->setQuestion($question2);
+        $manager->persist($answer2);
 
         $manager->flush();
     }

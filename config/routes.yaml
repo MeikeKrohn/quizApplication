@@ -10,14 +10,39 @@ listQuestions:
   path: /teacher/question
   controller: App\Controller\QuizController::listQuestions
 
-createQuestionForm:
-  path: /teacher/question/create
-  controller: App\Controller\QuizController::createQuestionForm
-
 deleteQuestion:
    path: /teacher/question/delete/{questionId}
    controller: App\Controller\QuizController::deleteQuestion
    methods: [DELETE]
+
+deleteAnswer:
+   path: /teacher/question/answer/delete/{answerId}
+   controller: App\Controller\QuizController::deleteAnswer
+   methods: [DELETE]
+
+editQuestion:
+  path: /teacher/question/edit/{questionId}
+  controller: App\Controller\QuizController::editQuestion
+
+createQuestion:
+  path: /teacher/question/create
+  controller: App\Controller\QuizController::createQuestion
+
+listExams:
+  path: /teacher/exam
+  controller: App\Controller\QuizController::listExams
+
+createExam:
+  path: /teacher/exam/create
+  controller: App\Controller\QuizController::createExam
+
+deleteExam:
+  path: /teacher/exam/delete/{examId}
+  controller: App\Controller\QuizController:deleteExam
+
+addQuestionsToExam:
+  path: /teacher/exam/create/questions/{examId}
+  controller: App\Controller\QuizController::addQuestionsToExam
 
 login:
   path: /login

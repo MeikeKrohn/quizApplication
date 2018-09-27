@@ -1,0 +1,45 @@
+{% extends 'baseLoggedIn.html.twig' %}
+
+{% block content %}
+    <div class="caption">
+        Your Exams
+    </div>
+
+    <div class="actionFieldTop">
+        <input type="button" class="orangeButton" onclick="location.href='{{ path('createExam') }}';" value="Add New Exam" />
+    </div>
+
+    <div class="questionList">
+        {% for c in categories %}
+            <details open="open">
+                <summary>{{ c.name }}</summary>
+
+                <table class="questionListTable">
+                    <thead>
+                    <tr>
+                        <th style="width: 70%; height: 45px">Exam</th>
+                        <th>Questions</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for e in exams %}
+                        {% if c.id == e.category.id %}
+                            <tr>
+                                <td>{{ e.name }}</td>
+                                <td style="text-align: center">{{ e.questions | length }}</td>
+                                <td>
+                                    <button style="width: 40px" data-id="{{ e.id }}" class="deleteExamButton">&#215</button>
+                                    <input style="width: 90px" type="button" class="editButton" onclick="" value="Edit Exam" />
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </details>
+            <hr style="width: 90%; margin-left: 0">
+        {% endfor %}
+    </div>
+
+{% endblock %}

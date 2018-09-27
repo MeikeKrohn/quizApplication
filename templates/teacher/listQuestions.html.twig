@@ -2,22 +2,23 @@
 
 {% block content %}
     <div class="caption">
-        Your questions
+        Your Questions
     </div>
 
     <div class="actionFieldTop">
-        <input type="button" class="orangeButton" onclick="location.href='{{ path('createQuestionForm') }}';" value="Add new Question" />
+        <input type="button" class="orangeButton" onclick="location.href='{{ path('createQuestion') }}';" value="Add New Question" />
     </div>
 
     <div class="questionList">
         {% for c in categories %}
-    <details>
+    <details open="open">
         <summary>{{ c.name }}</summary>
 
             <table class="questionListTable">
                 <thead>
                 <tr>
-                    <th style="width: 70%">Question</th>
+                    <th style="width: 70%; height: 45px">Question</th>
+                    <th>Answers</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -26,9 +27,10 @@
                         {% if c.id == q.category.id %}
                         <tr>
                             <td>{{ q.questionText }}</td>
+                            <td style="text-align: center">{{ q.answers | length }}</td>
                             <td>
-                                <button data-id="{{ q.id }}" class="editButton">Edit</button>
-                                <button data-id="{{ q.id }}" class="deleteButton">Delete</button>
+                                <button style="width: 40px" data-id="{{ q.id }}" class="deleteQuestionButton">&#215</button>
+                                <input style="width: 90px" type="button" class="editButton" onclick="location.href='{{ path('editQuestion', {'questionId': q.id}) }}';" value="Edit Question" />
                             </td>
                         </tr>
                         {% endif %}
@@ -36,6 +38,7 @@
                 </tbody>
             </table>
     </details>
+            <hr style="width: 90%; margin-left: 0">
         {% endfor %}
     </div>
 

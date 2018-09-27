@@ -16,7 +16,7 @@ body {
     background: var(--light-grey);
     font-family: Arial;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .login-box {
@@ -92,19 +92,34 @@ header::after{
 }
 
 .editButton,
-.deleteButton {
-    width: 70px;
+.deleteQuestionButton,
+.deleteExamButton {
     background: var(--orange);
     border: 1.5px solid var(--dark-grey);
     color: var(--dark-grey);
     padding: 5px;
     cursor: pointer;
-    margin: 12px 0;
+    margin: 4px 0;
     font-weight: bold;
+    font-size: 10px;
+}
+
+.editAnswersButton {
+    background: var(--orange);
+    width: 100px;
+    border: 1.5px solid var(--dark-grey);
+    color: var(--dark-grey);
+    padding: 5px;
+    cursor: pointer;
+    margin: 4px 0;
+    font-weight: bold;
+    font-size: 10px;
 }
 
 .editButton:hover,
-.deleteButton:hover {
+.deleteQuestionButton:hover,
+.editAnswersButton:hover,
+.deleteExamButton:hover {
     background: var(--dark-orange);
 }
 
@@ -139,7 +154,7 @@ nav a {
     color: var(--dark-grey);
     text-decoration: none;
     text-transform: uppercase;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 nav a:hover {
@@ -148,12 +163,17 @@ nav a:hover {
 
 
 .caption {
-    height: 70px;
     display: flex;
     margin-left: 110px;
     padding-top: 30px;
     color: var(--dark-grey);
-    font-size: 40px;
+    font-size: 46px;
+}
+
+.middleCaption {
+    padding-top: 30px;
+    color: var(--dark-grey);
+    font-size: 30px;
 }
 
 .actionFieldTop {
@@ -180,11 +200,20 @@ summary {
 .questionListTable thead {
     height: 50px;
     text-align: left;
-    font-size: 18px;
+    font-size: 14px;
 }
 
 .questionListTable td {
     height: 30px;
     padding: 5px 5px 0 0;
     text-align: left;
+}
+
+.editQuestionForm {
+    margin-left: 110px;
+    margin-right: 110px;
+}
+
+.answers {
+    list-style: none;
 }

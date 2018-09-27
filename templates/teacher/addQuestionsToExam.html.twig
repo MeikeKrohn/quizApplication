@@ -1,0 +1,19 @@
+{% extends 'baseLoggedIn.html.twig' %}
+
+{% block content %}
+
+    <div class="caption">
+        Add Questions To Your Exam
+    </div>
+
+    <div class="actionFieldTop">
+        Please, complete the form below.
+    </div>
+
+    <div class="editQuestionForm">
+        {{ form_start(form) }}
+        {{ form_row(form.questions) }}
+        {{ form_row(form.save) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
