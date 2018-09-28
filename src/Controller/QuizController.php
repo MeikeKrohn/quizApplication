@@ -213,12 +213,6 @@ class QuizController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($exam);
 
-            foreach ($exam->getQuestions() as $question)
-            {
-                $question->addExam($exam);
-                $entityManager->persist($question);
-            }
-
             $entityManager->flush();
 
             return $this->redirectToRoute('listExams');
@@ -230,6 +224,49 @@ class QuizController extends AbstractController
                 'questions' => $questions,
                 'exam' => $exam,
                 'form' => $form->createView()));
+    }
+
+    public function editExam(Request $request, $examId)
+    {
+        $activeUser = $this->getUser();
+
+        $exam = $this->getDoctrine()->getRepository(Exam::class)->find($examId);
+
+        $questions = $this->getDoctrine()->getRepository(Question::class)->findBy(array('category' => $exam->getCategory()));
+
+        $form = $this->createFormBuilder($exam)
+            ->add('name', TextType::class)
+            ->add('category', EntityType::class, array(
+                'class' => Category::class,
+                'choice_label' => 'name'))
+            ->add('questions', EntityType::class, array(
+                'class' => Question::class,
+                'choices' => $questions,
+                'choice_label' => 'questionText',
+                'multiple' => true,
+                'by_reference' => false,
+            ))
+            ->add('save', SubmitType::class, array('label' => 'Save Exam'))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $exam = $form->getData();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($exam);
+            $entityManager->flush();
+
+            return $this->redirect($this->generateUrl('editExam', array('examId' => $exam->getId())));
+        }
+
+        return $this->render('teacher/editExam.html.twig', array(
+           'activeUser' => $activeUser,
+           'exam' => $exam,
+           'form' => $form->createView()
+        ));
+
     }
 
     public function deleteExam($examId)

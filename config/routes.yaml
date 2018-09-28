@@ -36,6 +36,10 @@ createExam:
   path: /teacher/exam/create
   controller: App\Controller\QuizController::createExam
 
+editExam:
+  path: /teacher/exam/edit/{examId}
+  controller: App\Controller\QuizController::editExam
+
 deleteExam:
   path: /teacher/exam/delete/{examId}
   controller: App\Controller\QuizController:deleteExam

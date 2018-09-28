@@ -30,7 +30,7 @@
                                 <td style="text-align: center">{{ e.questions | length }}</td>
                                 <td>
                                     <button style="width: 40px" data-id="{{ e.id }}" class="deleteExamButton">&#215</button>
-                                    <input style="width: 90px" type="button" class="editButton" onclick="" value="Edit Exam" />
+                                    <input style="width: 90px" type="button" class="editButton" onclick="location.href='{{ path('editExam', {'examId': e.id}) }}';" value="Edit Exam" />
                                 </td>
                             </tr>
                         {% endif %}

@@ -1,0 +1,23 @@
+{% extends 'baseLoggedIn.html.twig' %}
+
+{% block content %}
+
+    <div class="caption">
+        Exam Editor
+    </div>
+
+    <div class="actionFieldTop">
+        Please, edit the exam below.
+    </div>
+
+    <div class="editQuestionForm">
+        {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.category) }}
+        {{ form_row(form.questions) }}
+        {{ form_row(form.save) }}
+        {{ form_end(form) }}
+
+    </div>
+
+{% endblock %}
