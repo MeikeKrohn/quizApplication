@@ -201,6 +201,7 @@ class QuizController extends AbstractController
                 'choices' => $questions,
                 'choice_label' => 'questionText',
                 'multiple' => true,
+                'by_reference' => false,
             ))
             ->add('save', SubmitType::class, array(
                 'label' => 'Save and Continue'))
