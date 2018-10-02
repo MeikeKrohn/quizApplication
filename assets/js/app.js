@@ -26,6 +26,7 @@ function deleteQuestionButtonClicked(event)
 
 function deleteAnswerButtonClicked(event)
 {
+    event.preventDefault();
     const answerId = event.target.getAttribute('data-id');
 
     console.log(answerId);

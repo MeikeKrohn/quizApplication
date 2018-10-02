@@ -14,6 +14,7 @@ use App\Entity\Category;
 use App\Entity\Exam;
 use App\Entity\Question;
 use App\Entity\User;
+use App\Entity\UserExam;
 use App\Form\Type\QuestionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -231,6 +232,7 @@ class QuizController extends AbstractController
         $activeUser = $this->getUser();
 
         $exam = $this->getDoctrine()->getRepository(Exam::class)->find($examId);
+        $students = $this->getDoctrine()->getRepository(User::class)->findBy(array('role' => 'ROLE_STUDENT'));
 
         $questions = $this->getDoctrine()->getRepository(Question::class)->findBy(array('category' => $exam->getCategory()));
 
@@ -256,6 +258,7 @@ class QuizController extends AbstractController
             $exam = $form->getData();
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($exam);
+
             $entityManager->flush();
 
             return $this->redirect($this->generateUrl('editExam', array('examId' => $exam->getId())));
