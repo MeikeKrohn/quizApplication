@@ -48,6 +48,26 @@ addQuestionsToExam:
   path: /teacher/exam/create/questions/{examId}
   controller: App\Controller\QuizController::addQuestionsToExam
 
+addStudentsToExam:
+  path: /teacher/exam/create/students/{examId}
+  controller: App\Controller\QuizController::addStudentsToExam
+
+listAvailableExams:
+  path: /student/availableExams
+  controller: App\Controller\QuizController::listAvailableExams
+
+takeExam:
+  path: /student/takeExam/{userExamId}
+  controller: App\Controller\QuizController::takeExam
+
+showStudentResults:
+  path: /student/showResults
+  controller: App\Controller\QuizController::showStudentResults
+
+showTeacherResultsList:
+  path: /teacher/showResults
+  controller: App\Controller\QuizController::showTeacherResultsList
+
 login:
   path: /login
 

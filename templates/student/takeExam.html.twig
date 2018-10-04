@@ -1,0 +1,26 @@
+{% extends 'baseLoggedIn.html.twig' %}
+
+{% block content %}
+    <div class="caption">
+        {{ userExam.exam.name }}
+    </div>
+
+    <div class="questionList">
+        {% for q in userExam.exam.questions %}
+            <div class="takeExamQuestionBlock">
+                <table>
+                    <tr>
+                        <td style="font-size: 30px">{{ q.questionText }}</td>
+                    </tr>
+                    {% for a in q.answers %}
+                    <tr>
+                        <td><input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBox"/> {{ a.answerText }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <button class="submitExamButton" data-id="{{ userExam.id}}">Submit</button>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

@@ -12,18 +12,26 @@
     </div>
 
     <div class="editQuestionForm">
-        {{ form_start(form) }}
-        {{ form_row(form.category) }}
-        {{ form_row(form.questionText) }}
-
-        <div class="middleCaption">
-            New Answers
-        </div>
-            <ul class="answers" data-prototype="{{ form_widget(form.answers.vars.prototype)|e('html_attr') }}">
-                {% for answer in form.answers %}
-                    {{ form_widget(form.answers) }}
+        <p>
+            Question Text:<br>
+            <input type="text" class="standardTextInput" id="questionText" />
+        </p>
+        <p>
+            Select a category:<br>
+            <select id="categoryList">
+                {% for c in categories %}
+                    <option value="{{ c.id }}">{{ c.name }}</option>
                 {% endfor %}
-            </ul>
-            {{ form_end(form) }}
+            </select>
+        </p>
+        <ul id="appendedAnswers">
+
+        </ul>
+        <p>
+            <button class="addAnswerToQuestionButton">Add Answer</button>
+        </p>
+        <p>
+            <button class="createQuestionButton">Save</button>
+        </p>
     </div>
 {% endblock %}

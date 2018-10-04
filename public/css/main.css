@@ -76,7 +76,9 @@ header::after{
     clear: both;
 }
 
-.orangeButton {
+.orangeButton,
+.submitExam,
+.addStudentsToExamButton{
     width: 170px;
     background: var(--orange);
     border: 1.5px solid var(--dark-grey);
@@ -87,13 +89,16 @@ header::after{
     font-weight: bold;
 }
 
-.orangeButton:hover {
+.orangeButton:hover,
+.submitExam:hover,
+.addStudentsToExamButton:hover {
     background: var(--dark-orange);
 }
 
 .editButton,
 .deleteQuestionButton,
-.deleteExamButton {
+.deleteExamButton,
+.takeExamButton {
     background: var(--orange);
     border: 1.5px solid var(--dark-grey);
     color: var(--dark-grey);
@@ -119,7 +124,8 @@ header::after{
 .editButton:hover,
 .deleteQuestionButton:hover,
 .editAnswersButton:hover,
-.deleteExamButton:hover {
+.deleteExamButton:hover,
+.takeExamButton:hover {
     background: var(--dark-orange);
 }
 
@@ -209,6 +215,11 @@ summary {
     text-align: left;
 }
 
+.listStudentsTable td {
+    height: 30px;
+    padding: 5px 5px 0 0;
+}
+
 .editQuestionForm {
     margin-left: 110px;
     margin-right: 110px;
@@ -216,4 +227,21 @@ summary {
 
 .answers {
     list-style: none;
+}
+
+.nestedSummary {
+    margin-left: 20px;
+}
+
+.selectStudentCheckBox {
+    -webkit-appearance: none;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: var(--light-blue);
+}
+
+.selectStudentCheckBox:checked {
+    background-color: var(--intense-blue);
 }

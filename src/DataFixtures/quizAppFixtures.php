@@ -11,8 +11,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Answer;
 use App\Entity\Category;
+use App\Entity\Exam;
 use App\Entity\Question;
 use App\Entity\User;
+use App\Entity\UserExam;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -85,21 +87,15 @@ class quizAppFixtures extends Fixture
 
         $question1 = new Question();
         $question1->setOwner($dummyTeacher1);
-        $question1->setQuestionText("Wer war Napoleon?");
+        $question1->setQuestionText("Who was Napoleon?");
         $question1->setCategory($category1);
         $manager->persist($question1);
 
         $question2 = new Question();
         $question2->setOwner($dummyTeacher1);
-        $question2->setQuestionText("Wann endete der zweite Weltkrieg?");
+        $question2->setQuestionText("When did World War 2 end?");
         $question2->setCategory($category1);
         $manager->persist($question2);
-
-        $question3 = new Question();
-        $question3->setOwner($dummyTeacher1);
-        $question3->setQuestionText("Was ist ein endoplasmatisches Retikulum?");
-        $question3->setCategory($category2);
-        $manager->persist($question3);
 
         $answer1 = new Answer();
         $answer1->setAnswerText("1941");
@@ -112,6 +108,30 @@ class quizAppFixtures extends Fixture
         $answer2->setIsCorrect(true);
         $answer2->setQuestion($question2);
         $manager->persist($answer2);
+
+        $answer3 = new Answer();
+        $answer3->setAnswerText("French statement and military leader");
+        $answer3->setIsCorrect(true);
+        $answer3->setQuestion($question1);
+        $manager->persist($answer3);
+
+        $answer4 = new Answer();
+        $answer4->setAnswerText("German chancellor in 2018");
+        $answer4->setIsCorrect(false);
+        $answer4->setQuestion($question1);
+        $manager->persist($answer4);
+
+        $exam1 = new Exam();
+        $exam1->setOwner($dummyTeacher1);
+        $exam1->setCategory($category1);
+        $exam1->setName("History Exam 1");
+        $exam1->addQuestion($question1);
+        $manager->persist($exam1);
+
+        $userExam1 = new UserExam();
+        $userExam1->setUser($dummyStudent1);
+        $userExam1->setExam($exam1);
+        $manager->persist($userExam1);
 
         $manager->flush();
     }

@@ -1,0 +1,54 @@
+{% extends 'baseLoggedIn.html.twig' %}
+
+{% block content %}
+    <div class="caption">
+        Exam Results
+    </div>
+
+    <div class="actionFieldTop">
+        See how students performed on your exams.
+    </div>
+
+    <div class="questionList">
+        {% for c in categories %}
+            <details open="open">
+                <summary>{{ c.name }}</summary>
+
+                    {% for e in exams %}
+                        {% if c.id == e.category.id %}
+                        <details>
+                            <summary class="nestedSummary">{{ e.name }}</summary>
+
+                            <table style="margin-left: 20px" class="questionListTable">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Result</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Overall result</td>
+                                        <td>###</td>
+                                        <td></td>
+                                    </tr>
+                                    {% for ue in userExams %}
+                                        {% if ue.exam.id == e.id %}
+                                        <tr>
+                                            <td>{{ ue.user.firstname }} {{ ue.user.lastname }}</td>
+                                            <td>{% if ue.result == null %}No result available{% else %}{{ ue.result }}{% endif %}</td>
+                                            <td>Button here</td>
+                                        </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </details>
+                        {% endif %}
+                    {% endfor %}
+            </details>
+        {% endfor %}
+    </div>
+
+{% endblock %}

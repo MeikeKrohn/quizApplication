@@ -1,0 +1,36 @@
+{% extends 'baseLoggedIn.html.twig' %}
+
+{% block content %}
+    <div class="caption">
+        Your Results
+    </div>
+
+    <div class="questionList">
+        {% for c in categories %}
+            <details open="open">
+                <summary>{{ c.name }}</summary>
+
+                <table class="questionListTable">
+                    <thead>
+                    <tr>
+                        <th style="width: 70%; height: 45px">Exam</th>
+                        <th>Result</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for e in userExams %}
+                        {% if c.id == e.exam.category.id %}
+                            <tr>
+                                <td>{{ e.exam.name }}</td>
+                                <td>{% if e.result == null %}No result available{% else %}{e.result{% endif %}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </details>
+            <hr style="width: 90%; margin-left: 0">
+        {% endfor %}
+    </div>
+
+{% endblock %}

@@ -3,23 +3,15 @@
 {% block content %}
 
     <div class="caption">
-        Exam Editor
+        Choose the students to take your exam.
     </div>
 
     <div class="actionFieldTop">
-        Please, edit the exam below.
+        Check or uncheck the boxes next to the students' names.
     </div>
 
     <div class="editQuestionForm">
-        {{ form_start(form) }}
-        {{ form_row(form.name) }}
-        {{ form_row(form.category) }}
-        {{ form_row(form.questions) }}
-        {{ form_row(form.save) }}
-        {{ form_end(form) }}
-    </div>
-    <div class="editQuestionForm">
-        <table class="listStudentsTable" id='exam' data-id="{{ exam.id }}">
+        <table class="listStudentsTable" id='exam' data-id="{{ examId }}">
             <tbody>
             {% for s in students %}
                 <tr>
@@ -31,5 +23,4 @@
         </table>
         <button class="addStudentsToExamButton">Submit</button>
     </div>
-
 {% endblock %}

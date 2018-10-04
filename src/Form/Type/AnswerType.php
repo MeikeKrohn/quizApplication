@@ -22,14 +22,15 @@ class AnswerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('answerText');
+
         $builder->add('isCorrect', ChoiceType::class,
             array(
                 'choices' => array(
                     'yes' => true,
                     'no' => false),
-                'multiple' => false, 'expanded' => true
+                'multiple' => false,
+                'expanded' => true
             ));
-        //$builder->add('id', HiddenType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
