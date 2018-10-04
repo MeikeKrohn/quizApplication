@@ -23,105 +23,12 @@ function deleteQuestionButtonClicked(event) {
         .then(response => location.reload());
 }
 
-function createQuestionButtonClicked(event) {
-    var questionText = document.getElementById("questionText").value;
-    var categoryList = document.getElementById("categoryList");
-    var category = parseInt(categoryList.options[categoryList.selectedIndex].value);
-    var answerTextBoxes = document.getElementsByClassName("answerText");
-
-    var answers = [];
-
-    if (answerTextBoxes.length > 0) {
-        for (let i = 0; i < answerTextBoxes.length; i++) {
-            var id = answerTextBoxes[i].getAttribute('id');
-            var isCorrect = document.getElementById("correctAnswer-" + id);
-
-            if (isCorrect.checked) {
-                var newAnswer = {answerText: answerTextBoxes[i].value, isCorrect: true};
-            } else {
-                var newAnswer = {answerText: answerTextBoxes[i].value, isCorrect: false};
-            }
-            answers.push(newAnswer);
-
-            if (answerTextBoxes.length - 1 === i) {
-                sendCreateQuestionRequestToServer(questionText, category, answers);
-            }
-        }
-    }
-}
-
-function sendCreateQuestionRequestToServer(questionText, category, answers) {
-    axios.post('/teacher/question/create', {
-        questionText: questionText,
-        category: category,
-        answers: answers
-    }).then(response => location.assign('/teacher/question'))
-}
-
-function updateQuestionButtonClicked(event) {
-    var questionId = event.target.getAttribute("id");
-    var questionText = document.getElementById("questionText").value;
-    var categoryList = document.getElementById("categoryList");
-    var category = parseInt(categoryList.options[categoryList.selectedIndex].value);
-    var answerTextBoxes = document.getElementsByClassName("answerText");
-
-    var answers = [];
-
-    if (answerTextBoxes.length > 0) {
-        for (let i = 0; i < answerTextBoxes.length; i++) {
-            var id = answerTextBoxes[i].getAttribute('id');
-            var isCorrect = document.getElementById('correctAnswer-' + id);
-
-            if(isCorrect.checked) {
-                var newAnswer = {answerId: id,answerText: answerTextBoxes[i].value, isCorrect: true};
-            } else {
-                var newAnswer = {answerId: id, answerText: answerTextBoxes[i].value, isCorrect: false};
-            }
-            answers.push(newAnswer);
-
-            if (answerTextBoxes.length - 1 === i) {
-                sendUpdateQuestionRequestToServer(questionId, questionText, category, answers);
-            }
-        }
-    }
-}
-
 function sendUpdateQuestionRequestToServer(questionId, questionText, category, answers) {
     axios.post('/teacher/question/edit/' + questionId, {
         questionText: questionText,
         category: category,
         answers: answers
     }).then(response => location.reload())
-}
-
-function addAnswerToQuestionButtonClicked(event) {
-
-    var html = "Answer text: <input type='text' class='answerText' id='" + counter + "'><br>Is correct: <input type='radio' class='isCorrect' id='correctAnswer-" + counter + "' name='isCorrect-" + counter + "' value='true' />yes<input type='radio' class='isCorrect' id='wrongAnswer-" + counter + "' name='isCorrect-" + counter + "' value='false' />no<br>"
-    var element = document.getElementById("appendedAnswers");
-    var answerForm = document.createElement("p");
-    answerForm.setAttribute('id', 'answerForm-' + counter.toString());
-    answerForm.innerHTML = html;
-
-    element.appendChild(answerForm);
-
-    var button = document.createElement("button");
-    button.setAttribute('class', 'deleteAnswerButton');
-    button.setAttribute('data-id', counter.toString());
-    button.innerHTML = "Delete Answer";
-    button.addEventListener('click', deleteNewAnswerButtonClicked);
-
-    element.append(button);
-    counter++;
-}
-
-function deleteNewAnswerButtonClicked(event) {
-    var id = event.target.getAttribute('data-id');
-    var answerForm = document.getElementById('answerForm-' + id);
-    var button = event.target;
-
-    answerForm.parentNode.removeChild(answerForm);
-    button.parentNode.removeChild(button);
-
 }
 
 function deleteExamButtonClicked(event) {
@@ -164,17 +71,19 @@ function submitExamButtonClicked(event) {
     //ADD CODE to read out checkboxes
 }
 
+function deleteExistingAnswerButtonClicked(event) {
+    event.preventDefault();
+    const answerId = event.target.getAttribute('data-id');
+
+    console.log(answerId);
+
+    axios.delete('/teacher/question/answer/delete/' + answerId)
+        .then(response => location.reload());
+
+}
+
 let deleteQuestionButton = document.querySelectorAll('.deleteQuestionButton');
 deleteQuestionButton.forEach(button => button.addEventListener('click', deleteQuestionButtonClicked));
-
-let createQuestionButton = document.querySelectorAll('.createQuestionButton');
-createQuestionButton.forEach(button => button.addEventListener('click', createQuestionButtonClicked));
-
-let updateQuestionButton = document.querySelectorAll('.updateQuestionButton');
-updateQuestionButton.forEach(button => button.addEventListener('click', updateQuestionButtonClicked));
-
-let addAnswerToQuestionButton = document.querySelectorAll('.addAnswerToQuestionButton');
-addAnswerToQuestionButton.forEach(button => button.addEventListener('click', addAnswerToQuestionButtonClicked));
 
 let deleteExamButton = document.querySelectorAll('.deleteExamButton');
 deleteExamButton.forEach(button => button.addEventListener('click', deleteExamButtonClicked));
@@ -184,3 +93,65 @@ addStudentsToExamButton.forEach(button => button.addEventListener('click', addSt
 
 let submitExamButton = document.querySelectorAll('.submitExamButton');
 submitExamButton.forEach(button => button.addEventListener('click', submitExamButtonClicked));
+
+let deleteExistingAnswerButton = document.querySelectorAll('.deleteExistingAnswerButton');
+deleteExistingAnswerButton.forEach(button => button.addEventListener('click', deleteExistingAnswerButtonClicked));
+
+
+var $collectionHolder;
+var $addAnswerButton = $('<button type="button" class="editAnswersButton">Add Answer</button>');
+var $newLinkLi = $('<li></li>').append($addAnswerButton);
+
+jQuery(document).ready(function() {
+    // Get the ul that holds the collection of tags
+    $collectionHolder = $('ul.answers');
+
+    $collectionHolder.find('li').each(function() {
+        addAnswerFormDeleteLink($(this));
+    });
+
+    // add the "Add Answer" anchor and li to the tags ul
+    $collectionHolder.append($newLinkLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+    $addAnswerButton.on('click', function(e) {
+        // add a new tag form (see next code block)
+        addAnswerForm($collectionHolder, $newLinkLi);
+    });
+});
+
+function addAnswerForm($collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = $collectionHolder.data('prototype');
+
+    // get the new index
+    var index = $collectionHolder.data('index');
+
+    var newForm = prototype;
+
+    newForm = newForm.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    $collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add Answer" link li
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLi.before($newFormLi);
+
+    addAnswerFormDeleteLink($newFormLi);
+}
+
+function addAnswerFormDeleteLink($answerFormLi)
+{
+    var $removeFormButton = $('<button type="button" class="editAnswersButton">Delete Answer</button>');
+
+    $answerFormLi.append($removeFormButton);
+
+    $removeFormButton.on('click', function(e) {
+        // remove the li for the tag form
+        $answerFormLi.remove();
+    });
+}

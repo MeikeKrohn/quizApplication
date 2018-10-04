@@ -64,50 +64,35 @@ class QuizController extends AbstractController
     public function createQuestion(Request $request)
     {
         $activeUser = $this->getUser();
-        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
 
         $question = new Question();
         $question->setOwner($activeUser);
 
-        $data = json_decode($request->getContent(), true);
-        $request->request->replace(is_array($data) ? $data : array());
+        $form = $this->createForm(QuestionType::class, $question);
 
-        error_log($data['questionText']);
-        error_log($data['category']);
-        error_log($data['answers'][0]['answerText']);
+        $form->handleRequest($request);
 
-
-        if($data != null) {
+        if($form->isSubmitted() && $form->isValid())
+        {
             $entityManager = $this->getDoctrine()->getManager();
-
-            $categoryId = intval($data['category']);
-            $questionText = (string) $data['questionText'];
-
-            $assignedCategory = $this->getDoctrine()->getRepository(Category::class)->find($categoryId);
-
-            $question->setQuestionText($questionText);
-            $question->setCategory($assignedCategory);
-
-            for ($i = 0; $i < sizeof($data['answers']); $i++) {
-
-                $answerText = (string) $data['answers'][$i]['answerText'];
-                $newAnswer = new Answer();
-                $newAnswer->setQuestion($question);
-                $newAnswer->setAnswerText($answerText);
-                $newAnswer->setIsCorrect($data['answers'][$i]['isCorrect']);
-                $question->addAnswer($newAnswer);
-                $entityManager->persist($newAnswer);
-            }
-
+            $question = $form->getData();
             $entityManager->persist($question);
+
+            foreach ($question->getAnswers() as $answer)
+            {
+                error_log($answer->getId());
+                $answer->setQuestion($question);
+                $entityManager->persist($answer);
+            }
             $entityManager->flush();
+
+            return $this->redirectToRoute('listQuestions');
         }
 
         return $this->render('teacher/createQuestion.html.twig',
             array(
                 'activeUser' => $activeUser,
-                'categories' => $categories
-                ));
+                'form' => $form->createView()));
 
     }
 
@@ -117,47 +102,34 @@ class QuizController extends AbstractController
 
         $question = $this->getDoctrine()->getRepository(Question::class)->find($questionId);
 
-        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+        $answers = $question->getAnswers();
 
-        $data = json_decode($request->getContent(), true);
-        $request->request->replace(is_array($data) ? $data : array());
+        $form = $this->createForm(QuestionType::class, $question);
 
-        error_log($data['questionText']);
-        error_log($data['category']);
-        error_log($data['answers'][0]['answerText']);
+        $form->handleRequest($request);
 
-        if($data != null) {
+        if($form->isSubmitted() && $form->isValid())
+        {
             $entityManager = $this->getDoctrine()->getManager();
-
-            $categoryId = intval($data['category']);
-            $questionText = (string) $data['questionText'];
-
-            $assignedCategory = $this->getDoctrine()->getRepository(Category::class)->find($categoryId);
-
-            $question->setQuestionText($questionText);
-            $question->setCategory($assignedCategory);
+            $question = $form->getData();
             $entityManager->persist($question);
 
-            for ($i = 0; $i < sizeof($data['answers']); $i++) {
-
-                $answerText = (string) $data['answers'][$i]['answerText'];
-                $newAnswer = new Answer();
-                $newAnswer->setQuestion($question);
-                $newAnswer->setAnswerText($answerText);
-                $newAnswer->setIsCorrect($data['answers'][$i]['isCorrect']);
-                $entityManager->persist($newAnswer);
-
+            foreach ($question->getAnswers() as $answer)
+            {
+                $answer->setQuestion($question);
+                $entityManager->persist($answer);
             }
             $entityManager->flush();
-        }
 
+            return $this->redirect($this->generateUrl('editQuestion', array('questionId' => $question->getId())));
+        }
 
         return $this->render('teacher/editQuestion.html.twig',
             array(
                 'activeUser' => $activeUser,
                 'question' => $question,
-                'categories' => $categories
-            ));
+                'answers' => $answers,
+                'form' => $form->createView()));
     }
 
     public function deleteAnswer($answerId)
@@ -169,7 +141,6 @@ class QuizController extends AbstractController
         $entityManager->flush();
 
         return new Response();
-
     }
 
     public function listExams()

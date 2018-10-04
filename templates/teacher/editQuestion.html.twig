@@ -1,46 +1,30 @@
 {% extends 'baseLoggedIn.html.twig' %}
 
-{% block javascripts %}<script src="{{ asset('build/app.js') }}" ></script>{% endblock %}
-
 {% block content %}
+
     <div class="caption">
-        Edit Question
+        Question Editor
     </div>
 
     <div class="actionFieldTop">
-        Please, complete the form below.
+        Please, edit the question below.
     </div>
 
     <div class="editQuestionForm">
-        <p>
-            Question Text:<br>
-            <input type="text" class="standardTextInput" id="questionText" value="{{ question.questionText }}" />
-        </p>
-        <p>
-            Select a category:<br>
-            <select id="categoryList">
-                {% for c in categories %}
-                    <option value="{{ c.id }}" {% if c.id == question.category.id %}selected="selected"{% endif %}>{{ c.name }}</option>
-                {% endfor %}
-            </select>
-        </p>
-        <ul id="existingAnswers">
-            {% for a in question.answers %}
-                Answer text:
-                <input type='text' class='answerText' id='{{ a.id }}' value='{{ a.answerText }}'><br>
-                Is correct:
-                <input type='radio' class='isCorrect' id='correctAnswer-{{ a.id }}' name='isCorrect-{{ a.id }}' value='true' {% if a.isCorrect %}checked='checked'{% endif %}/>yes
-                <input type='radio' class='isCorrect' id='wrongAnswer-{{ a.id }}' name='isCorrect-{{ a.id }}' value='false' {% if a.isCorrect == false %}checked='checked'{% endif %}/>no<br>
+        {{ form_start(form) }}
+        {{ form_row(form.category) }}
+        {{ form_row(form.questionText) }}
+
+        Answers:
+        <ul class="answers" data-prototype="{{ form_widget(form.answers.vars.prototype)|e('html_attr') }}">
+            {% for answer in answers %}
+                {{ form_widget(form.answers) }}
+                <button style="width: 40px" data-id="{{ answer.id }}" class="deleteExistingAnswerButton">&#215</button>
             {% endfor %}
         </ul>
-        <ul id="appendedAnswers">
 
-        </ul>
-        <p>
-            <button class="addAnswerToQuestionButton">Add Answer</button>
-        </p>
-        <p>
-            <button class="updateQuestionButton" id="{{ question.id }}">Save</button>
-        </p>
+        {{ form_end(form) }}
+
     </div>
+
 {% endblock %}
