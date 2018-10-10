@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="caption">
-        Your Exams
+        Exam Overview
     </div>
 
     <div class="actionFieldTop">
@@ -30,7 +30,8 @@
                                 <td style="text-align: center">{{ e.questions | length }}</td>
                                 <td>
                                     <button style="width: 40px" data-id="{{ e.id }}" class="deleteExamButton">&#215</button>
-                                    <input style="width: 90px" type="button" class="editButton" onclick="location.href='{{ path('editExam', {'examId': e.id}) }}';" value="Edit Exam" />
+                                    <input style="width: 80px" type="button" class="editButton" onclick="location.href='{{ path('editExamQuestions', {'examId': e.id}) }}';" value="&#9998; Content" />
+                                    <input style="width: 80px" type="button" class="editButton" onclick="location.href='{{ path('editExamStudents', {'examId': e.id}) }}';" value="&#9998; Students" />
                                 </td>
                             </tr>
                         {% endif %}

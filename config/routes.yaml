@@ -36,9 +36,13 @@ createExam:
   path: /teacher/exam/create
   controller: App\Controller\QuizController::createExam
 
-editExam:
-  path: /teacher/exam/edit/{examId}
-  controller: App\Controller\QuizController::editExam
+editExamQuestions:
+  path: /teacher/exam/edit/questions/{examId}
+  controller: App\Controller\QuizController::editExamQuestions
+
+editExamStudents:
+  path: /teacher/exam/edit/students/{examId}
+  controller: App\Controller\QuizController::editExamStudents
 
 deleteExam:
   path: /teacher/exam/delete/{examId}
@@ -67,6 +71,10 @@ showStudentResults:
 showTeacherResultsList:
   path: /teacher/showResults
   controller: App\Controller\QuizController::showTeacherResultsList
+
+showTeacherDetailedResult:
+  path: /teacher/showResult/{userExamId}
+  controller: App\Controller\QuizController::showTeacherDetailedResult
 
 login:
   path: /login

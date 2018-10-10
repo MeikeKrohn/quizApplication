@@ -23,21 +23,12 @@ function deleteQuestionButtonClicked(event) {
         .then(response => location.reload());
 }
 
-function sendUpdateQuestionRequestToServer(questionId, questionText, category, answers) {
-    axios.post('/teacher/question/edit/' + questionId, {
-        questionText: questionText,
-        category: category,
-        answers: answers
-    }).then(response => location.reload())
-}
-
 function deleteExamButtonClicked(event) {
     const examId = event.target.getAttribute('data-id');
 
     axios.delete('/teacher/exam/delete/' + examId)
         .then(response => location.reload());
 }
-
 
 function addStudentsToExamButtonClicked(event) {
     const examId = document.getElementById('exam').getAttribute('data-id');
@@ -52,23 +43,55 @@ function addStudentsToExamButtonClicked(event) {
 
             if (allCheckBoxes.length - 1 === i) {
                 console.log(checkedCheckBoxes);
-                sendRequestToServer(examId, checkedCheckBoxes);
+                if (event.target.getAttribute('name') == 'create') {
+                    sendCreateRequestToServer(examId, checkedCheckBoxes);
+                }
+                if (event.target.getAttribute('name') == 'edit') {
+                    sendEditRequestToServer(examId, checkedCheckBoxes);
+                }
             }
         }
     }
 }
 
-function sendRequestToServer(examId, assignedStudents) {
+function sendCreateRequestToServer(examId, assignedStudents) {
     axios.post('/teacher/exam/create/students/' + examId, {
         students: assignedStudents
     }).then(response => location.assign('/teacher/exam'))
 }
 
-function submitExamButtonClicked(event) {
-    const userExamId = event.target.getAttribute('data-id');
-    const allCheckBoxes = document.getElementsByClassName('selectAnswerCheckBox');
+function sendEditRequestToServer(examId, assignedStudents) {
+    axios.post('/teacher/exam/edit/students/' + examId, {
+        students: assignedStudents
+    }).then(response => location.reload())
+}
 
-    //ADD CODE to read out checkboxes
+function submitExamButtonClicked(event) {
+    var userExamId = event.target.getAttribute('data-id');
+    var allCheckBoxes = document.getElementsByClassName('selectAnswerCheckBox');
+
+    var givenAnswers = [];
+
+    if (allCheckBoxes.length > 0) {
+        for (let i = 0; i < allCheckBoxes.length; i++) {
+            var answerId = parseInt(allCheckBoxes[i].getAttribute('data-id'));
+            var isChecked = allCheckBoxes[i].checked;
+
+            var answer = {'answerId' : answerId, 'isChecked' : isChecked};
+
+            givenAnswers.push(answer);
+
+            if (allCheckBoxes.length - 1 === i) {
+                sendSubmitExamRequestToServer(userExamId, givenAnswers);
+            }
+        }
+    }
+}
+
+function sendSubmitExamRequestToServer(userExamId, givenAnswers) {
+    axios.post('/student/takeExam/' + userExamId, {
+        givenAnswers: givenAnswers
+    }).then(response => location.assign('/student/showResults'))
 }
 
 function deleteExistingAnswerButtonClicked(event) {
@@ -102,11 +125,11 @@ var $collectionHolder;
 var $addAnswerButton = $('<button type="button" class="editAnswersButton">Add Answer</button>');
 var $newLinkLi = $('<li></li>').append($addAnswerButton);
 
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
     // Get the ul that holds the collection of tags
     $collectionHolder = $('ul.answers');
 
-    $collectionHolder.find('li').each(function() {
+    $collectionHolder.find('li').each(function () {
         addAnswerFormDeleteLink($(this));
     });
 
@@ -117,7 +140,7 @@ jQuery(document).ready(function() {
     // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
-    $addAnswerButton.on('click', function(e) {
+    $addAnswerButton.on('click', function (e) {
         // add a new tag form (see next code block)
         addAnswerForm($collectionHolder, $newLinkLi);
     });
@@ -144,13 +167,12 @@ function addAnswerForm($collectionHolder, $newLinkLi) {
     addAnswerFormDeleteLink($newFormLi);
 }
 
-function addAnswerFormDeleteLink($answerFormLi)
-{
+function addAnswerFormDeleteLink($answerFormLi) {
     var $removeFormButton = $('<button type="button" class="editAnswersButton">Delete Answer</button>');
 
     $answerFormLi.append($removeFormButton);
 
-    $removeFormButton.on('click', function(e) {
+    $removeFormButton.on('click', function (e) {
         // remove the li for the tag form
         $answerFormLi.remove();
     });

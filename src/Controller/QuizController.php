@@ -51,16 +51,6 @@ class QuizController extends AbstractController
             array('activeUser' => $activeUser, 'categories' => $categories, 'questions' => $questions));
     }
 
-    public function deleteQuestion($questionId)
-    {
-        $question = $this->getDoctrine()->getRepository(Question::class)->find($questionId);
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($question);
-        $entityManager->flush();
-
-        return new Response();
-    }
-
     public function createQuestion(Request $request)
     {
         $activeUser = $this->getUser();
@@ -72,14 +62,12 @@ class QuizController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $question = $form->getData();
             $entityManager->persist($question);
 
-            foreach ($question->getAnswers() as $answer)
-            {
+            foreach ($question->getAnswers() as $answer) {
                 error_log($answer->getId());
                 $answer->setQuestion($question);
                 $entityManager->persist($answer);
@@ -108,14 +96,12 @@ class QuizController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $question = $form->getData();
             $entityManager->persist($question);
 
-            foreach ($question->getAnswers() as $answer)
-            {
+            foreach ($question->getAnswers() as $answer) {
                 $answer->setQuestion($question);
                 $entityManager->persist($answer);
             }
@@ -130,6 +116,16 @@ class QuizController extends AbstractController
                 'question' => $question,
                 'answers' => $answers,
                 'form' => $form->createView()));
+    }
+
+    public function deleteQuestion($questionId)
+    {
+        $question = $this->getDoctrine()->getRepository(Question::class)->find($questionId);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($question);
+        $entityManager->flush();
+
+        return new Response();
     }
 
     public function deleteAnswer($answerId)
@@ -152,7 +148,6 @@ class QuizController extends AbstractController
 
         $exams = $this->getDoctrine()
             ->getRepository(Exam::class)->findBy(array('owner' => $activeUser));
-
 
         return $this->render('teacher/listExams.html.twig',
             array('activeUser' => $activeUser, 'categories' => $categories, 'exams' => $exams));
@@ -238,12 +233,8 @@ class QuizController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
 
-        error_log("HELLO MEIKE");
-
         $data = json_decode($request->getContent(), true);
         $request->request->replace(is_array($data) ? $data : array());
-
-        $entityManager = $this->getDoctrine()->getManager();
 
         for ($i = 0; $i < sizeof($data['students']); $i++) {
             $student = $this->getDoctrine()->getRepository(User::class)->find($data['students'][$i]);
@@ -263,7 +254,7 @@ class QuizController extends AbstractController
             ));
     }
 
-    public function editExam(Request $request, $examId)
+    public function editExamQuestions(Request $request, $examId)
     {
         $activeUser = $this->getUser();
         $exam = $this->getDoctrine()->getRepository(Exam::class)->find($examId);
@@ -294,16 +285,62 @@ class QuizController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirect($this->generateUrl('editExam', array('examId' => $exam->getId())));
+            return $this->redirect($this->generateUrl('editExamQuestions', array('examId' => $exam->getId())));
         }
 
-        return $this->render('teacher/editExam.html.twig', array(
+        return $this->render('teacher/editExamQuestions.html.twig', array(
             'activeUser' => $activeUser,
             'exam' => $exam,
             'students' => $students,
             'form' => $form->createView()
         ));
 
+    }
+
+    public function editExamStudents(Request $request, $examId)
+    {
+        $activeUser = $this->getUser();
+        $exam = $this->getDoctrine()->getRepository(Exam::class)->find($examId);
+        $allStudents = $this->getDoctrine()->getRepository(User::class)->findBy(array('role' => 'ROLE_STUDENT'));
+        $userExams = $this->getDoctrine()->getRepository(UserExam::class)->findBy(array('exam' => $exam));
+
+        $assignedStudents = [];
+
+        foreach ($userExams as $ue) {
+            array_push($assignedStudents, $ue->getUser());
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace(is_array($data) ? $data : array());
+
+        if ($data != null) {
+
+            foreach ($userExams as $old) {
+                $entityManager->remove($old);
+            }
+
+            for ($i = 0; $i < sizeof($data['students']); $i++) {
+                $student = $this->getDoctrine()->getRepository(User::class)->find($data['students'][$i]);
+
+                $userExam = new UserExam();
+                $userExam->setExam($exam);
+                $userExam->setUser($student);
+                $entityManager->persist($userExam);
+
+            }
+
+            $entityManager->flush();
+        }
+
+        return $this->render('teacher/editExamStudents.html.twig', array(
+            'activeUser' => $activeUser,
+            'exam' => $exam,
+            'allStudents' => $allStudents,
+            'assignedStudents' => $assignedStudents,
+            'userExams' => $userExams
+        ));
     }
 
     public function deleteExam($examId)
@@ -348,6 +385,43 @@ class QuizController extends AbstractController
 
         $userExam = $this->getDoctrine()->getRepository(UserExam::class)->find($userExamId);
 
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace(is_array($data) ? $data : array());
+
+        if ($data != null) {
+            $allCorrectAnswers = 0;
+            $answerCounter = 0;
+
+            for ($i = 0; $i < sizeof($data['givenAnswers']); $i++) {
+                $answer = $this->getDoctrine()->getRepository(Answer::class)->find($data['givenAnswers'][$i]['answerId']);
+
+                if($answer->getIsCorrect()) {
+                    $allCorrectAnswers = $allCorrectAnswers + 2;
+                    if($data['givenAnswers'][$i]['isChecked']) {
+                        $answerCounter = $answerCounter + 2;
+                    }
+                } else {
+                    if($data['givenAnswers'][$i]['isChecked']) {
+                        $answerCounter--;
+                    }
+                }
+            }
+
+            if($answerCounter >= 0) {
+                $result = 100 / $allCorrectAnswers * $answerCounter;
+            } else {
+                $result = 0;
+            }
+
+
+            $userExam->setResult($result);
+            $entityManager->flush();
+
+
+        }
+
         return $this->render('student/takeExam.html.twig',
             array(
                 'activeUser' => $activeUser,
@@ -387,6 +461,18 @@ class QuizController extends AbstractController
                 'categories' => $categories,
                 'exams' => $exams,
                 'userExams' => $userExams
+            ));
+    }
+
+    public function showTeacherDetailedResult($userExamId) {
+        $activeUser = $this->getUser();
+
+        $userExam = $this->getDoctrine()->getRepository(UserExam::class)->find($userExamId);
+
+        return $this->render('teacher/showDetailedResult.html.twig',
+            array(
+                'activeUser' => $activeUser,
+                'userExam' => $userExam
             ));
     }
 }

@@ -22,7 +22,7 @@
                         {% if c.id == e.exam.category.id %}
                             <tr>
                                 <td>{{ e.exam.name }}</td>
-                                <td>{% if e.result == null %}No result available{% else %}{e.result{% endif %}</td>
+                                <td>{% if e.result is null %}No result available{% else %}{{ e.result }} %{% endif %}</td>
                             </tr>
                         {% endif %}
                     {% endfor %}

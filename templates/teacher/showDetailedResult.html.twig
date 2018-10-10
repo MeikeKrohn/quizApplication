@@ -1,0 +1,15 @@
+{% extends 'baseLoggedIn.html.twig' %}
+
+{% block content %}
+    <div class="caption">
+        Result for {{ userExam.user.firstname }} {{ userExam.user.lastname }}
+    </div>
+
+    <div class="actionFieldTop">
+        in {{ userExam.exam.name }}
+    </div>
+
+    <div class="questionList">
+    </div>
+
+{% endblock %}

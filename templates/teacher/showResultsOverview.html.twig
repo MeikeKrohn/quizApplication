@@ -1,6 +1,10 @@
 {% extends 'baseLoggedIn.html.twig' %}
 
 {% block content %}
+
+    {% set sumResults = 0 %}
+    {% set counter = 0 %}
+
     <div class="caption">
         Exam Results
     </div>
@@ -28,20 +32,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Overall result</td>
-                                        <td>###</td>
-                                        <td></td>
-                                    </tr>
                                     {% for ue in userExams %}
                                         {% if ue.exam.id == e.id %}
+                                            {% set sumResults = sumResults + ue.result %}
+                                            {% set counter = counter + 1 %}
                                         <tr>
                                             <td>{{ ue.user.firstname }} {{ ue.user.lastname }}</td>
-                                            <td>{% if ue.result == null %}No result available{% else %}{{ ue.result }}{% endif %}</td>
-                                            <td>Button here</td>
+                                            <td>{% if ue.result is null %}No result available{% else %}{{ ue.result }}%{% endif %}</td>
+                                            <td><input style="width: 80px" type="button" class="editButton" onclick="location.href='{{ path('showTeacherDetailedResult', {'userExamId': ue.id}) }}';" value="Details" /></td>
                                         </tr>
                                         {% endif %}
                                     {% endfor %}
+                                    <tr>
+                                        <td style="font-weight: bold">Overall result</td>
+                                        <td style="font-weight: bold">{{ sumResults // counter }}%</td>
+                                        <td></td>
+                                        {% set sumResults = 0 %}
+                                        {% set counter = 0 %}
+                                    </tr>
                                 </tbody>
                             </table>
                         </details>
