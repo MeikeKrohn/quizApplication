@@ -35,18 +35,19 @@ function addStudentsToExamButtonClicked(event) {
     const allCheckBoxes = document.getElementsByClassName('selectStudentCheckBox');
     const checkedCheckBoxes = [];
 
-    if (allCheckBoxes.length > 0) {
+    if(allCheckBoxes.length > 0) {
         for (let i = 0; i < allCheckBoxes.length; i++) {
             if (allCheckBoxes[i].checked) {
                 checkedCheckBoxes.push(parseInt(allCheckBoxes[i].getAttribute('data-id')));
             }
 
             if (allCheckBoxes.length - 1 === i) {
-                console.log(checkedCheckBoxes);
-                if (event.target.getAttribute('name') == 'create') {
+                if(checkedCheckBoxes.length == 0) {
+                    event.preventDefault();
+                    alert("Select at least one student");
+                } else if (event.target.getAttribute('name') == 'create') {
                     sendCreateRequestToServer(examId, checkedCheckBoxes);
-                }
-                if (event.target.getAttribute('name') == 'edit') {
+                } else if (event.target.getAttribute('name') == 'edit') {
                     sendEditRequestToServer(examId, checkedCheckBoxes);
                 }
             }

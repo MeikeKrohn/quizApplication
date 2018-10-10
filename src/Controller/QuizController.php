@@ -302,13 +302,13 @@ class QuizController extends AbstractController
         $activeUser = $this->getUser();
         $exam = $this->getDoctrine()->getRepository(Exam::class)->find($examId);
         $allStudents = $this->getDoctrine()->getRepository(User::class)->findBy(array('role' => 'ROLE_STUDENT'));
-        $userExams = $this->getDoctrine()->getRepository(UserExam::class)->findBy(array('exam' => $exam));
+        $existingUserExams = $this->getDoctrine()->getRepository(UserExam::class)->findBy(array('exam' => $exam));
 
         $assignedStudents = [];
-
-        foreach ($userExams as $ue) {
+        foreach ($existingUserExams as $ue) {
             array_push($assignedStudents, $ue->getUser());
         }
+
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -317,6 +317,42 @@ class QuizController extends AbstractController
 
         if ($data != null) {
 
+            $newUserExams = [];
+
+            for ($i = 0; $i < sizeof($data['students']); $i++) {
+                $student = $this->getDoctrine()->getRepository(User::class)->find($data['students'][$i]);
+                $correspondingUserExams = $this->getDoctrine()->getRepository(UserExam::class)->findBy(array('exam' => $exam, 'user' => $student));
+
+                foreach ($correspondingUserExams as $item) {
+                    $correspondingUserExam = $item;
+                }
+
+                if (!$correspondingUserExams) {
+                    $correspondingUserExam = new UserExam();
+                    $correspondingUserExam->setUser($student);
+                    $correspondingUserExam->setExam($exam);
+                    $entityManager->persist($correspondingUserExam);
+                }
+
+                array_push($newUserExams, $correspondingUserExam);
+
+            }
+
+            for ($i = 0; $i < sizeof($existingUserExams); $i++) {
+                for ($j = 0; $j < sizeof($newUserExams); $j++) {
+                    if ($existingUserExams[$i] == $newUserExams[$j]) {
+                        break;
+                    }
+                    if (sizeof($newUserExams) - 1 == $j) {
+                        $entityManager->remove($existingUserExams[$i]);
+                    }
+                }
+
+            }
+
+            // if (allCheckBoxes.length - 1 === i) {
+
+            /*
             foreach ($userExams as $old) {
                 $entityManager->remove($old);
             }
@@ -330,6 +366,7 @@ class QuizController extends AbstractController
                 $entityManager->persist($userExam);
 
             }
+            */
 
             $entityManager->flush();
         }
@@ -339,8 +376,15 @@ class QuizController extends AbstractController
             'exam' => $exam,
             'allStudents' => $allStudents,
             'assignedStudents' => $assignedStudents,
-            'userExams' => $userExams
+            'userExams' => $existingUserExams
         ));
+    }
+
+    public function compare_userExams($obj_a, $obj_b)
+    {
+        $a = $obj_a->getId();
+        $b = $obj_b->getId();
+        return $a - $b;
     }
 
     public function deleteExam($examId)
@@ -397,19 +441,19 @@ class QuizController extends AbstractController
             for ($i = 0; $i < sizeof($data['givenAnswers']); $i++) {
                 $answer = $this->getDoctrine()->getRepository(Answer::class)->find($data['givenAnswers'][$i]['answerId']);
 
-                if($answer->getIsCorrect()) {
+                if ($answer->getIsCorrect()) {
                     $allCorrectAnswers = $allCorrectAnswers + 2;
-                    if($data['givenAnswers'][$i]['isChecked']) {
+                    if ($data['givenAnswers'][$i]['isChecked']) {
                         $answerCounter = $answerCounter + 2;
                     }
                 } else {
-                    if($data['givenAnswers'][$i]['isChecked']) {
+                    if ($data['givenAnswers'][$i]['isChecked']) {
                         $answerCounter--;
                     }
                 }
             }
 
-            if($answerCounter >= 0) {
+            if ($answerCounter >= 0) {
                 $result = 100 / $allCorrectAnswers * $answerCounter;
             } else {
                 $result = 0;
@@ -464,7 +508,8 @@ class QuizController extends AbstractController
             ));
     }
 
-    public function showTeacherDetailedResult($userExamId) {
+    public function showTeacherDetailedResult($userExamId)
+    {
         $activeUser = $this->getUser();
 
         $userExam = $this->getDoctrine()->getRepository(UserExam::class)->find($userExamId);

@@ -14,11 +14,12 @@
         <table class="listStudentsTable" id='exam' data-id="{{ exam.id }}">
             <tbody>
             {% for s in allStudents %}
-                <tr>
-                    <td style="width: 50px"><input type="checkbox" data-id="{{ s.id }}" class="selectStudentCheckBox" {% if s in assignedStudents %}checked="checked"{% endif %}/>
-                    </td>
-                    <td>{{ s.firstname }} {{ s.lastname }}</td>
-                </tr>
+                    <tr>
+                        <td style="width: 50px">
+                            <input type="checkbox" data-id="{{ s.id }}" class="selectStudentCheckBox" {% if s in assignedStudents %}checked="checked"{% endif %}/>
+                        </td>
+                        <td>{{ s.firstname }} {{ s.lastname }}</td>
+                    </tr>
             {% endfor %}
             </tbody>
         </table>
