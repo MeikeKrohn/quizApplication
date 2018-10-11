@@ -10,25 +10,28 @@
     </div>
 
     <div class="questionList">
-        {% for q in userExam.exam.questions %}
-            <div class="takeExamQuestionBlock">
-                <table>
-                    <tr style="font-size: 20px;">
-                        <td style="padding-bottom: 10px; text-decoration: underline;">Result: {{ userExam.result }}%</td>
-                    </tr>
+        <div class="takeExamQuestionBlock">
+            <table>
+                <tr>
+                    <td style="font-size: 20px; text-decoration: underline">
+                        Result: {{ userExam.result }}%
+                    </td>
+                </tr>
+                {% for q in userExam.exam.questions %}
                     <tr>
                         <td style="font-size: 20px">{{ q.questionText }}</td>
                     </tr>
                     {% for a in q.answers %}
-                            <tr>
-                                <td>
-                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked"{% endif %}readonly/> {{ a.answerText }}
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/> {{ a.answerText }}
+                            </td>
+                        </tr>
                     {% endfor %}
-                </table>
-            </div>
-        {% endfor %}
+
+                {% endfor %}
+            </table>
+        </div>
     </div>
 
 {% endblock %}

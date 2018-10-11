@@ -238,7 +238,7 @@ summary {
 
 .selectStudentCheckBox,
 .selectAnswerCheckBoxActive,
-.selectAnswerCheckBoxPassive {
+.selectAnswerCheckBoxPassive{
     -webkit-appearance: none;
     top: 0;
     left: 0;
@@ -247,12 +247,12 @@ summary {
     background-color: var(--light-blue);
 }
 
-.selectStudentCheckBox:checked,
-.selectAnswerCheckBoxActive:checked,
-.selectAnswerCheckBoxPassive {
-    background-color: var(--intense-blue);
-}
-
 .selectAnswerCheckBoxPassive {
     pointer-events: none;
+}
+
+.selectStudentCheckBox:checked,
+.selectAnswerCheckBoxActive:checked,
+.selectAnswerCheckBoxPassive:checked {
+    background-color: var(--intense-blue);
 }

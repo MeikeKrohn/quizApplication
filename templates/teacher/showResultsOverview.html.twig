@@ -18,43 +18,52 @@
             <details open="open">
                 <summary>{{ c.name }}</summary>
 
-                    {% for e in exams %}
-                        {% if c.id == e.category.id %}
+                {% for e in exams %}
+                    {% if c.id == e.category.id %}
                         <details>
                             <summary class="nestedSummary">{{ e.name }}</summary>
 
                             <table style="margin-left: 20px" class="questionListTable">
                                 <thead>
-                                    <tr>
-                                        <th>Student</th>
-                                        <th>Result</th>
-                                        <th>Actions</th>
-                                    </tr>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Result</th>
+                                    <th>Actions</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    {% for ue in userExams %}
-                                        {% if ue.exam.id == e.id %}
-                                            {% set sumResults = sumResults + ue.result %}
-                                            {% set counter = counter + 1 %}
+                                {% for ue in userExams %}
+                                    {% if ue.exam.id == e.id %}
+                                        {% set sumResults = sumResults + ue.result %}
+                                        {% set counter = counter + 1 %}
                                         <tr>
                                             <td>{{ ue.user.firstname }} {{ ue.user.lastname }}</td>
-                                            <td>{% if ue.result is null %}No result available{% else %}{{ ue.result }}%{% endif %}</td>
-                                            <td><input style="width: 80px" type="button" class="editButton" onclick="location.href='{{ path('showTeacherDetailedResult', {'userExamId': ue.id}) }}';" value="Details" /></td>
+                                            {% if ue.result is null %}
+                                                <td>
+                                                    No result available
+                                                </td>
+                                            {% else %}
+                                                <td>{{ ue.result }}%</td>
+                                                <td>
+                                                    <input style="width: 80px" type="button" class="editButton" onclick="location.href='{{ path('showTeacherDetailedResult', {'userExamId': ue.id}) }}';" value="Details"/>
+                                                </td>
+                                            {% endif %}
+
                                         </tr>
-                                        {% endif %}
-                                    {% endfor %}
-                                    <tr>
-                                        <td style="font-weight: bold">Overall result</td>
-                                        <td style="font-weight: bold">{% if counter != 0 %}{{ sumResults // counter }}%{% else %}0%{% endif %}</td>
-                                        <td></td>
-                                        {% set sumResults = 0 %}
-                                        {% set counter = 0 %}
-                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                <tr>
+                                    <td style="font-weight: bold">Overall result</td>
+                                    <td style="font-weight: bold">{% if counter != 0 %}{{ sumResults // counter }}%{% else %}0%{% endif %}</td>
+                                    <td></td>
+                                    {% set sumResults = 0 %}
+                                    {% set counter = 0 %}
+                                </tr>
                                 </tbody>
                             </table>
                         </details>
-                        {% endif %}
-                    {% endfor %}
+                    {% endif %}
+                {% endfor %}
             </details>
         {% endfor %}
     </div>

@@ -475,17 +475,20 @@ class QuizController extends AbstractController
                 }
             }
 
+            foreach($userExam->getGivenAnswers() as $answer) {
+                $answer->addUserExam($userExam);
+                $entityManager->persist($answer);
+            }
+
             if ($answerCounter >= 0) {
                 $result = 100 / $allCorrectAnswers * $answerCounter;
             } else {
                 $result = 0;
             }
 
-
             $userExam->setResult($result);
+
             $entityManager->flush();
-
-
         }
 
         return $this->render('student/takeExam.html.twig',
