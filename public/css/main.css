@@ -77,7 +77,7 @@ header::after{
 }
 
 .orangeButton,
-.submitExam,
+.submitExamButton,
 .addStudentsToExamButton{
     width: 170px;
     background: var(--orange);
@@ -90,7 +90,7 @@ header::after{
 }
 
 .orangeButton:hover,
-.submitExam:hover,
+.submitExamButton:hover,
 .addStudentsToExamButton:hover {
     background: var(--dark-orange);
 }
@@ -184,10 +184,14 @@ nav a:hover {
     font-size: 30px;
 }
 
-.actionFieldTop {
+.actionFieldTopText,
+.actionFieldTopButton {
     height: 50px;
     margin-left: 110px;
     padding-top: 5px;
+}
+
+.actionFieldTopText {
     font-size: 20px;
 }
 
@@ -255,4 +259,30 @@ summary {
 .selectAnswerCheckBoxActive:checked,
 .selectAnswerCheckBoxPassive:checked {
     background-color: var(--intense-blue);
+}
+
+.takeExamQuestionAnswerBlock {
+    padding-top: 10px;
+    padding-bottom: 40px;
+}
+
+.detailedResultQuestionAnswerBlock {
+    padding-top: 10px;
+    paddint-bottom: 20px;
+}
+
+.takeExamQuestionText,
+.detailedResultQuestionText {
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.takeExamAnswerBlock td,
+.detailedResultAnswerBlock td {
+    vertical-align: middle;
+}
+
+.detailedResultDisplayResult {
+    text-decoration: underline;
+    font-size: 20px;
 }

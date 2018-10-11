@@ -9,51 +9,61 @@
         in {{ userExam.exam.name }}
     </div>
 
-    <div class="questionList">
-        <div class="takeExamQuestionBlock">
-            <table>
-                <tr>
-                    <td style="font-size: 20px; text-decoration: underline">
-                        Result: {{ userExam.result }}%
-                    </td>
-                </tr>
+    <div class="editQuestionForm">
 
-                {% if userExam.exam.isRandomExam and questions is defined %}
-
-                    {% for q in questions %}
-                        <tr>
-                            <td style="font-size: 20px">{{ q.questionText }}</td>
-                        </tr>
-                        {% for a in q.answers %}
-                            <tr>
-                                <td>
-                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/> {{ a.answerText }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-
-                    {% endfor %}
-
-                {% else %}
-
-                    {% for q in userExam.exam.questions %}
-                        <tr>
-                            <td style="font-size: 20px">{{ q.questionText }}</td>
-                        </tr>
-                        {% for a in q.answers %}
-                            <tr>
-                                <td>
-                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/> {{ a.answerText }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-
-                    {% endfor %}
-
-                {% endif %}
-
-            </table>
+        <div class="detailedResultDisplayResult">
+            Result: {{ userExam.result }}%
         </div>
+
+        {% if userExam.exam.isRandomExam and questions is defined %}
+
+            {% for q in questions %}
+                <div class="detailedResultQuestionAnswerBlock">
+                    <div class="detailedResultQuestionText">
+                        {{ q.questionText }}
+                    </div>
+
+                    <table class="detailedResultAnswerBlock">
+                        {% for a in q.answers %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/>
+                                </td>
+                                <td style="padding-left: 5px;">
+                                    {{ a.answerText }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endfor %}
+
+        {% else %}
+
+            {% for q in userExam.exam.questions %}
+                <div class="takeExamQuestionAnswerBlock">
+                    <div class="takeExamQuestionText">
+                        {{ q.questionText }}
+                    </div>
+
+                    <table class="takeExamAnswerBlock">
+                        {% for a in q.answers %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/>
+                                </td>
+                                <td style="padding-left: 5px;">
+                                    {{ a.answerText }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endfor %}
+
+        {% endif %}
+
+
     </div>
 
 {% endblock %}

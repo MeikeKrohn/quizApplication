@@ -5,47 +5,61 @@
         {{ userExam.exam.name }}
     </div>
 
-    {% if userExam.exam.isRandomExam and randomQuestions is defined %}
-
-        {% for q in randomQuestions %}
-            <div class="takeExamQuestionBlock">
-                <table>
-                    <tr>
-                        <td style="font-size: 30px">{{ q.questionText }}</td>
-                    </tr>
-                    {% for a in q.answers %}
-                        <tr>
-                            <td>
-                                <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxActive"/> {{ a.answerText }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        {% endfor %}
-
-    {% else %}
-
-        {% for q in userExam.exam.questions %}
-            <div class="takeExamQuestionBlock">
-                <table>
-                    <tr>
-                        <td style="font-size: 30px">{{ q.questionText }}</td>
-                    </tr>
-                    {% for a in q.answers %}
-                        <tr>
-                            <td>
-                                <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxActive"/> {{ a.answerText }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-
-        {% endfor %}
-    {% endif %}
-
-    <button class="submitExamButton" data-id="{{ userExam.id }}">Submit</button>
+    <div class="actionFieldTopText">
+        Please note that each question can have one or multiple correct answers.
     </div>
 
+    <div class="editQuestionForm">
+        {% if userExam.exam.isRandomExam and randomQuestions is defined %}
+
+            {% for q in randomQuestions %}
+                <div class="takeExamQuestionAnswerBlock">
+                    <div class="takeExamQuestionText">
+                        {{ q.questionText }}
+                    </div>
+
+                    <table class="takeExamAnswerBlock">
+                        {% for a in q.answers %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxActive"/>
+                                </td>
+                                <td style="padding-left: 5px;">
+                                    {{ a.answerText }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            {% for q in userExam.exam.questions %}
+                <div class="takeExamQuestionAnswerBlock">
+                    <div class="takeExamQuestionText">
+                        {{ q.questionText }}
+                    </div>
+
+                    <table class="takeExamAnswerBlock">
+                        {% for a in q.answers %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxActive"/>
+                                </td>
+                                <td style="padding-left: 5px;">
+                                    {{ a.answerText }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endfor %}
+
+        {% endif %}
+
+        <button class="submitExamButton" data-id="{{ userExam.id }}">Submit</button>
+
+    </div>
 {% endblock %}

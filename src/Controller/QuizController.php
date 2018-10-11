@@ -574,8 +574,9 @@ class QuizController extends AbstractController
         if($userExam->getExam()->getIsRandomExam()) {
             $givenAnswers = $userExam->getGivenAnswers();
             foreach($givenAnswers as $answer) {
-                array_push($questions, $answer->getQuestion());
-                $questions = array_unique($questions);
+                if (!in_array($answer->getQuestion(), $questions)) {
+                    array_push($questions, $answer->getQuestion());
+                }
             }
         }
 
