@@ -19,6 +19,9 @@
                             <input type="checkbox" data-id="{{ s.id }}" class="selectStudentCheckBox" {% if s in assignedStudents %}checked="checked"{% endif %}/>
                         </td>
                         <td>{{ s.firstname }} {{ s.lastname }}</td>
+                        {% if s in studentsWhoTookExam %}
+                            <td style="font-size: 10px">(Attention: Student already took exam)</td>
+                        {% endif %}
                     </tr>
             {% endfor %}
             </tbody>

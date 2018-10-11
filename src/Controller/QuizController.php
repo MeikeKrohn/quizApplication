@@ -320,11 +320,12 @@ class QuizController extends AbstractController
         $allStudents = $this->getDoctrine()->getRepository(User::class)->findBy(array('role' => 'ROLE_STUDENT'));
         $existingUserExams = $this->getDoctrine()->getRepository(UserExam::class)->findBy(array('exam' => $exam));
 
-        for ($i = 0; $i < sizeof($existingUserExams); $i++){
-            for ($j = 0; $j < sizeof($allStudents); $j++) {
-                if($existingUserExams[$i]->getUser() == $allStudents[$j] && $existingUserExams[$i]->getResult() != null) {
-                    unset($allStudents[$j]);
-                }
+
+        // Filter those students who already took the exam and should thus not be unassigned from exam
+        $studentsWhoTookExam = [];
+        foreach ($existingUserExams as $ue) {
+            if ($ue->getResult() != null) {
+                array_push($studentsWhoTookExam, $ue->getUser());
             }
         }
 
@@ -371,7 +372,7 @@ class QuizController extends AbstractController
             // Delete the UserExams that are no longer required
             for ($i = 0; $i < sizeof($existingUserExams); $i++) {
                 for ($j = 0; $j < sizeof($newUserExams); $j++) {
-                    if ($existingUserExams[$i] == $newUserExams[$j]) {
+                    if ($existingUserExams[$i] == $newUserExams[$j] || $existingUserExams[$i]->getResult() != null) {
                         break;
                     }
                     if (sizeof($newUserExams) - 1 == $j) {
@@ -389,8 +390,14 @@ class QuizController extends AbstractController
             'exam' => $exam,
             'allStudents' => $allStudents,
             'assignedStudents' => $assignedStudents,
+            'studentsWhoTookExam' => $studentsWhoTookExam,
             'userExams' => $existingUserExams
         ));
+    }
+
+    function compare_values($input1, $input2)
+    {
+        return $input1->getId() - $input2->getId();
     }
 
     public function compare_userExams($obj_a, $obj_b)

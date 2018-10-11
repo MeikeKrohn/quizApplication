@@ -22,7 +22,7 @@
                     {% for a in q.answers %}
                             <tr>
                                 <td>
-                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBox" {% if a in userExam.givenAnswers %} checked="checked"{% endif %}readonly/> {{ a.answerText }}
+                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked"{% endif %}readonly/> {{ a.answerText }}
                                 </td>
                             </tr>
                     {% endfor %}

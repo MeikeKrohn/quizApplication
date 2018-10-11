@@ -87,7 +87,7 @@ function sendEditRequestToServer(examId, assignedStudents) {
 
 function submitExamButtonClicked(event) {
     var userExamId = event.target.getAttribute('data-id');
-    var allCheckBoxes = document.getElementsByClassName('selectAnswerCheckBox');
+    var allCheckBoxes = document.getElementsByClassName('selectAnswerCheckBoxActive');
 
     var givenAnswers = [];
 

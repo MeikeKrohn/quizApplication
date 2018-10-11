@@ -13,16 +13,14 @@
                         <td style="font-size: 30px">{{ q.questionText }}</td>
                     </tr>
                     {% for a in q.answers %}
-                        <tr>
-                            <td>
-                                <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBox"/> {{ a.answerText }}
-                            </td>
-                        </tr>
+                    <tr>
+                        <td><input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxActive"/> {{ a.answerText }}</td>
+                    </tr>
                     {% endfor %}
                 </table>
             </div>
         {% endfor %}
-        <button class="submitExamButton" data-id="{{ userExam.id }}">Submit</button>
+        <button class="submitExamButton" data-id="{{ userExam.id}}">Submit</button>
     </div>
 
 {% endblock %}
