@@ -98,7 +98,8 @@ header::after{
 .editButton,
 .deleteQuestionButton,
 .deleteExamButton,
-.takeExamButton {
+.takeExamButton,
+.deleteExistingAnswerButton{
     background: var(--orange);
     border: 1.5px solid var(--dark-grey);
     color: var(--dark-grey);
@@ -125,7 +126,8 @@ header::after{
 .deleteQuestionButton:hover,
 .editAnswersButton:hover,
 .deleteExamButton:hover,
-.takeExamButton:hover {
+.takeExamButton:hover,
+.deleteExistingAnswerButton:hover {
     background: var(--dark-orange);
 }
 

@@ -17,9 +17,9 @@
 
         Answers:
         <ul class="answers" data-prototype="{{ form_widget(form.answers.vars.prototype)|e('html_attr') }}">
+
             {% for answer in answers %}
                 {{ form_widget(form.answers) }}
-                <button style="width: 40px" data-id="{{ answer.id }}" class="deleteExistingAnswerButton">&#215</button>
             {% endfor %}
         </ul>
 
