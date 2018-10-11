@@ -569,9 +569,10 @@ class QuizController extends AbstractController
 
         $userExam = $this->getDoctrine()->getRepository(UserExam::class)->find($userExamId);
 
+        $questions = [];
+
         if($userExam->getExam()->getIsRandomExam()) {
             $givenAnswers = $userExam->getGivenAnswers();
-            $questions = [];
             foreach($givenAnswers as $answer) {
                 array_push($questions, $answer->getQuestion());
                 $questions = array_unique($questions);

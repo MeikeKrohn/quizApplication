@@ -20,14 +20,16 @@
                     </thead>
                     <tbody>
                     {% for e in userExams %}
-                        {% if c.id == e.exam.category.id %}
-                            <tr>
-                                <td>{{ e.exam.name }}</td>
-                                <td style="text-align: center">{{ e.exam.questions | length }}</td>
-                                <td>
-                                    <input style="width: 90px" type="button" class="takeExamButton" onclick="location.href='{{ path('takeExam', {'userExamId': e.id}) }}';" value="Take Exam" />
-                                </td>
-                            </tr>
+                        {% if e.exam.questions is not empty %}
+                            {% if c.id == e.exam.category.id %}
+                                <tr>
+                                    <td>{{ e.exam.name }}</td>
+                                    <td style="text-align: center">{% if e.exam.isRandomExam %}random{% else %}{{ e.exam.questions | length }}{% endif %}</td>
+                                    <td>
+                                        <input style="width: 90px" type="button" class="takeExamButton" onclick="location.href='{{ path('takeExam', {'userExamId': e.id}) }}';" value="Take Exam"/>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                     </tbody>
