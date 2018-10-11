@@ -10,6 +10,22 @@
     </div>
 
     <div class="questionList">
+        {% for q in userExam.exam.questions %}
+            <div class="takeExamQuestionBlock">
+                <table>
+                    <tr>
+                        <td style="font-size: 30px">{{ q.questionText }}</td>
+                    </tr>
+                    {% for a in q.answers %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBox" {% if a in userExam.givenAnswers %} checked="checked"{% endif %}readonly/> {{ a.answerText }}
+                                </td>
+                            </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
     </div>
 
 {% endblock %}

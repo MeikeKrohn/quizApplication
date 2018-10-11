@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,6 +34,16 @@ class UserExam
      * @ORM\Column(type="integer", nullable=true)
      */
     private $result;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Answer", inversedBy="userExams")
+     */
+    private $givenAnswers;
+
+    public function __construct()
+    {
+        $this->givenAnswers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -70,6 +82,32 @@ class UserExam
     public function setResult(?int $result): self
     {
         $this->result = $result;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Answer[]
+     */
+    public function getGivenAnswers(): Collection
+    {
+        return $this->givenAnswers;
+    }
+
+    public function addGivenAnswer(Answer $givenAnswer): self
+    {
+        if (!$this->givenAnswers->contains($givenAnswer)) {
+            $this->givenAnswers[] = $givenAnswer;
+        }
+
+        return $this;
+    }
+
+    public function removeGivenAnswer(Answer $givenAnswer): self
+    {
+        if ($this->givenAnswers->contains($givenAnswer)) {
+            $this->givenAnswers->removeElement($givenAnswer);
+        }
 
         return $this;
     }

@@ -18,6 +18,7 @@ use App\Entity\UserExam;
 use App\Form\Type\QuestionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -201,6 +202,10 @@ class QuizController extends AbstractController
                 'multiple' => true,
                 'by_reference' => false,
             ))
+            ->add('random', ButtonType::class, array(
+                'label' => 'Choose randomly',
+                'attr' => array('class' => 'chooseRandomQuestionsButton')
+            ))
             ->add('save', SubmitType::class, array(
                 'label' => 'Save and Continue'))
             ->getForm();
@@ -272,6 +277,10 @@ class QuizController extends AbstractController
                 'choice_label' => 'questionText',
                 'multiple' => true,
                 'by_reference' => false,
+            ))
+            ->add('random', ButtonType::class, array(
+                'label' => 'Choose randomly',
+                'attr' => array('class' => 'chooseRandomQuestionsButton')
             ))
             ->add('save', SubmitType::class, array('label' => 'Save Exam'))
             ->getForm();
@@ -445,10 +454,12 @@ class QuizController extends AbstractController
                     $allCorrectAnswers = $allCorrectAnswers + 2;
                     if ($data['givenAnswers'][$i]['isChecked']) {
                         $answerCounter = $answerCounter + 2;
+                        $userExam->addGivenAnswer($answer);
                     }
                 } else {
                     if ($data['givenAnswers'][$i]['isChecked']) {
                         $answerCounter--;
+                        $userExam->addGivenAnswer($answer);
                     }
                 }
             }

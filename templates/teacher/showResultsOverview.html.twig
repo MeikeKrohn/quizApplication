@@ -45,7 +45,7 @@
                                     {% endfor %}
                                     <tr>
                                         <td style="font-weight: bold">Overall result</td>
-                                        <td style="font-weight: bold">{{ sumResults // counter }}%</td>
+                                        <td style="font-weight: bold">{% if counter != 0 %}{{ sumResults // counter }}%{% else %}0%{% endif %}</td>
                                         <td></td>
                                         {% set sumResults = 0 %}
                                         {% set counter = 0 %}

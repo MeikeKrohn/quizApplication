@@ -235,7 +235,8 @@ summary {
     margin-left: 20px;
 }
 
-.selectStudentCheckBox {
+.selectStudentCheckBox,
+.selectAnswerCheckBox{
     -webkit-appearance: none;
     top: 0;
     left: 0;
@@ -244,6 +245,11 @@ summary {
     background-color: var(--light-blue);
 }
 
-.selectStudentCheckBox:checked {
+.selectStudentCheckBox:checked,
+.selectAnswerCheckBox:checked {
     background-color: var(--intense-blue);
+}
+
+.selectAnswerCheckBox {
+    pointer-events: none;
 }

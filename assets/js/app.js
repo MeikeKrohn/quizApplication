@@ -15,6 +15,24 @@ import axios from 'axios';
 
 var counter = 0.1;
 
+let deleteQuestionButton = document.querySelectorAll('.deleteQuestionButton');
+deleteQuestionButton.forEach(button => button.addEventListener('click', deleteQuestionButtonClicked));
+
+let deleteExamButton = document.querySelectorAll('.deleteExamButton');
+deleteExamButton.forEach(button => button.addEventListener('click', deleteExamButtonClicked));
+
+let addStudentsToExamButton = document.querySelectorAll('.addStudentsToExamButton');
+addStudentsToExamButton.forEach(button => button.addEventListener('click', addStudentsToExamButtonClicked));
+
+let submitExamButton = document.querySelectorAll('.submitExamButton');
+submitExamButton.forEach(button => button.addEventListener('click', submitExamButtonClicked));
+
+let deleteExistingAnswerButton = document.querySelectorAll('.deleteExistingAnswerButton');
+deleteExistingAnswerButton.forEach(button => button.addEventListener('click', deleteExistingAnswerButtonClicked));
+
+let chooseRandomQuestionsButton = document.querySelectorAll('.chooseRandomQuestionsButton');
+chooseRandomQuestionsButton.forEach(button => button.addEventListener('click', chooseRandomQuestionsButtonClicked));
+
 function deleteQuestionButtonClicked(event) {
     const questionId = event.target.getAttribute('data-id');
 
@@ -106,20 +124,33 @@ function deleteExistingAnswerButtonClicked(event) {
 
 }
 
-let deleteQuestionButton = document.querySelectorAll('.deleteQuestionButton');
-deleteQuestionButton.forEach(button => button.addEventListener('click', deleteQuestionButtonClicked));
+function chooseRandomQuestionsButtonClicked(event) {
+    var selection = document.getElementById('form_questions');
+    var allOptions = selection.options;
+    var numberOfOptions = allOptions.length;
+    var numberOfChoices =  numberOfOptions - numberOfOptions * (1/2);
+    var choices = [];
 
-let deleteExamButton = document.querySelectorAll('.deleteExamButton');
-deleteExamButton.forEach(button => button.addEventListener('click', deleteExamButtonClicked));
+    //Choose the indexes to be selected in the allOptions-Array randomly
+    for(let i = 0; i <= Math.floor(numberOfChoices); i++) {
+        var rand = Math.random();
+        rand *= numberOfOptions;
+        rand = Math.floor(rand);
+        choices.push(rand);
+    }
 
-let addStudentsToExamButton = document.querySelectorAll('.addStudentsToExamButton');
-addStudentsToExamButton.forEach(button => button.addEventListener('click', addStudentsToExamButtonClicked));
+    //Set the options selected that have been randomly chosen
+    for(let i = 0; i < allOptions.length; i++) {
+        allOptions[i].selected = false;
+        for(let j = 0; j < choices.length; j++) {
+            if(i == choices[j]) {
+                allOptions[i].selected = true;
+            }
+        }
+    }
 
-let submitExamButton = document.querySelectorAll('.submitExamButton');
-submitExamButton.forEach(button => button.addEventListener('click', submitExamButtonClicked));
 
-let deleteExistingAnswerButton = document.querySelectorAll('.deleteExistingAnswerButton');
-deleteExistingAnswerButton.forEach(button => button.addEventListener('click', deleteExistingAnswerButtonClicked));
+}
 
 
 var $collectionHolder;
