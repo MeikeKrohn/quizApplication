@@ -19,11 +19,13 @@
                     </thead>
                     <tbody>
                     {% for e in userExams %}
-                        {% if c.id == e.exam.category.id %}
-                            <tr>
-                                <td>{{ e.exam.name }}</td>
-                                <td>{% if e.result is null %}No result available{% else %}{{ e.result }} %{% endif %}</td>
-                            </tr>
+                        {% if  e.exam.questions is not empty or e.exam.isRandomExam %}
+                            {% if c.id == e.exam.category.id %}
+                                <tr>
+                                    <td>{{ e.exam.name }}</td>
+                                    <td>{% if e.result is null %}No result available{% else %}{{ e.result }} %{% endif %}</td>
+                                </tr>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                     </tbody>
