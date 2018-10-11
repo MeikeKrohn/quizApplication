@@ -166,6 +166,14 @@ class QuizController extends AbstractController
             ->add('category', EntityType::class, array(
                 'class' => Category::class,
                 'choice_label' => 'name'))
+            ->add('isRandomExam', ChoiceType::class, array(
+                'choices' => array(
+                    'Choose Questions manually' => false,
+                    'Choose Questions randomly' => true),
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Exam Type'
+            ))
             ->add('save', SubmitType::class, array(
                 'label' => 'Save and Continue'))
             ->getForm();
@@ -174,12 +182,23 @@ class QuizController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $exam = $form->getData();
+
             $exam->setOwner($activeUser);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($exam);
             $entityManager->flush();
 
+            if($exam->getIsRandomExam()) {
+                return $this->redirect($this->generateUrl('addStudentsToExam', array('examId' => $exam->getId())));
+            } else {
+                return $this->redirect($this->generateUrl('addQuestionsToExam', array('examId' => $exam->getId())));
+            }
+
+            /*
+
+
             return $this->redirect($this->generateUrl('addQuestionsToExam', array('examId' => $exam->getId())));
+            */
         }
 
         return $this->render('teacher/createExam.html.twig',
@@ -276,12 +295,10 @@ class QuizController extends AbstractController
                 'choices' => $questions,
                 'choice_label' => 'questionText',
                 'multiple' => true,
-                'by_reference' => false,
-            ))
+                'by_reference' => false))
             ->add('random', ButtonType::class, array(
                 'label' => 'Choose randomly',
-                'attr' => array('class' => 'chooseRandomQuestionsButton')
-            ))
+                'attr' => array('class' => 'chooseRandomQuestionsButton')))
             ->add('save', SubmitType::class, array('label' => 'Save Exam'))
             ->getForm();
 
@@ -324,7 +341,7 @@ class QuizController extends AbstractController
         // Filter those students who already took the exam and should thus not be unassigned from exam
         $studentsWhoTookExam = [];
         foreach ($existingUserExams as $ue) {
-            if ($ue->getResult() != null) {
+            if ($ue->getResult() !== null) {
                 array_push($studentsWhoTookExam, $ue->getUser());
             }
         }
@@ -449,6 +466,18 @@ class QuizController extends AbstractController
 
         $userExam = $this->getDoctrine()->getRepository(UserExam::class)->find($userExamId);
 
+        $chosenQuestions = [];
+
+        if($userExam->getExam()->getIsRandomExam()) {
+            $allQuestions = $this->getDoctrine()->getRepository(Question::class)->findBy(array('category' => $userExam->getExam()->getCategory()));
+
+            $max = mt_rand(1, sizeOf($allQuestions));
+
+            shuffle($allQuestions);
+            $chosenQuestions = array_slice($allQuestions, 0, $max);
+        }
+
+
         $entityManager = $this->getDoctrine()->getManager();
 
         $data = json_decode($request->getContent(), true);
@@ -494,6 +523,7 @@ class QuizController extends AbstractController
         return $this->render('student/takeExam.html.twig',
             array(
                 'activeUser' => $activeUser,
+                'randomQuestions' => $chosenQuestions,
                 'userExam' => $userExam,
             ));
     }
@@ -539,10 +569,20 @@ class QuizController extends AbstractController
 
         $userExam = $this->getDoctrine()->getRepository(UserExam::class)->find($userExamId);
 
+        if($userExam->getExam()->getIsRandomExam()) {
+            $givenAnswers = $userExam->getGivenAnswers();
+            $questions = [];
+            foreach($givenAnswers as $answer) {
+                array_push($questions, $answer->getQuestion());
+                $questions = array_unique($questions);
+            }
+        }
+
         return $this->render('teacher/showDetailedResult.html.twig',
             array(
                 'activeUser' => $activeUser,
-                'userExam' => $userExam
+                'userExam' => $userExam,
+                'questions' => $questions
             ));
     }
 }

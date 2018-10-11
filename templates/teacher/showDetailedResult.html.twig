@@ -17,19 +17,41 @@
                         Result: {{ userExam.result }}%
                     </td>
                 </tr>
-                {% for q in userExam.exam.questions %}
-                    <tr>
-                        <td style="font-size: 20px">{{ q.questionText }}</td>
-                    </tr>
-                    {% for a in q.answers %}
+
+                {% if userExam.exam.isRandomExam and questions is defined %}
+
+                    {% for q in questions %}
                         <tr>
-                            <td>
-                                <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/> {{ a.answerText }}
-                            </td>
+                            <td style="font-size: 20px">{{ q.questionText }}</td>
                         </tr>
+                        {% for a in q.answers %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/> {{ a.answerText }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+
                     {% endfor %}
 
-                {% endfor %}
+                {% else %}
+
+                    {% for q in userExam.exam.questions %}
+                        <tr>
+                            <td style="font-size: 20px">{{ q.questionText }}</td>
+                        </tr>
+                        {% for a in q.answers %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/> {{ a.answerText }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    {% endfor %}
+
+                {% endif %}
+
             </table>
         </div>
     </div>

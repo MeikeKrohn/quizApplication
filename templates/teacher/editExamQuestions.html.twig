@@ -12,12 +12,18 @@
 
     <div class="editQuestionForm">
         {{ form_start(form) }}
+        {{ form_row(form._token) }}
         {{ form_row(form.name) }}
         {{ form_row(form.category) }}
+
+        {% if not exam.isRandomExam %}
         {{ form_row(form.questions) }}
         {{ form_row(form.random) }}
+        {% endif %}
+
         {{ form_row(form.save) }}
-        {{ form_end(form) }}
+
+        {{ form_end(form, {'render_rest': false}) }}
     </div>
 
 {% endblock %}

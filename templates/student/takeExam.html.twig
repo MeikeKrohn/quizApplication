@@ -5,7 +5,27 @@
         {{ userExam.exam.name }}
     </div>
 
-    <div class="questionList">
+    {% if userExam.exam.isRandomExam and randomQuestions is defined %}
+
+        {% for q in randomQuestions %}
+            <div class="takeExamQuestionBlock">
+                <table>
+                    <tr>
+                        <td style="font-size: 30px">{{ q.questionText }}</td>
+                    </tr>
+                    {% for a in q.answers %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxActive"/> {{ a.answerText }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
+
+    {% else %}
+
         {% for q in userExam.exam.questions %}
             <div class="takeExamQuestionBlock">
                 <table>
@@ -13,14 +33,19 @@
                         <td style="font-size: 30px">{{ q.questionText }}</td>
                     </tr>
                     {% for a in q.answers %}
-                    <tr>
-                        <td><input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxActive"/> {{ a.answerText }}</td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxActive"/> {{ a.answerText }}
+                            </td>
+                        </tr>
                     {% endfor %}
                 </table>
             </div>
+
         {% endfor %}
-        <button class="submitExamButton" data-id="{{ userExam.id}}">Submit</button>
+    {% endif %}
+
+    <button class="submitExamButton" data-id="{{ userExam.id }}">Submit</button>
     </div>
 
 {% endblock %}

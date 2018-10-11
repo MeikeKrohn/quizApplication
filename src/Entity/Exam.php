@@ -45,6 +45,11 @@ class Exam
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isRandomExam;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -146,6 +151,18 @@ class Exam
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getIsRandomExam(): ?bool
+    {
+        return $this->isRandomExam;
+    }
+
+    public function setIsRandomExam(bool $isRandomExam): self
+    {
+        $this->isRandomExam = $isRandomExam;
 
         return $this;
     }
