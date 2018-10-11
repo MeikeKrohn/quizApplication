@@ -306,6 +306,13 @@ class QuizController extends AbstractController
 
     }
 
+    /**
+     * Update the information on which students shall be assigned to a certain exam.
+     *
+     * @param Request $request
+     * @param $examId
+     * @return Response
+     */
     public function editExamStudents(Request $request, $examId)
     {
         $activeUser = $this->getUser();
@@ -313,29 +320,43 @@ class QuizController extends AbstractController
         $allStudents = $this->getDoctrine()->getRepository(User::class)->findBy(array('role' => 'ROLE_STUDENT'));
         $existingUserExams = $this->getDoctrine()->getRepository(UserExam::class)->findBy(array('exam' => $exam));
 
+        for ($i = 0; $i < sizeof($existingUserExams); $i++){
+            for ($j = 0; $j < sizeof($allStudents); $j++) {
+                if($existingUserExams[$i]->getUser() == $allStudents[$j] && $existingUserExams[$i]->getResult() != null) {
+                    unset($allStudents[$j]);
+                }
+            }
+        }
+
+        // Define an array which contains all Students already assigned to the exam in question
         $assignedStudents = [];
         foreach ($existingUserExams as $ue) {
             array_push($assignedStudents, $ue->getUser());
         }
 
-
         $entityManager = $this->getDoctrine()->getManager();
 
+        // Converting the received JSON object into a PHP object
         $data = json_decode($request->getContent(), true);
         $request->request->replace(is_array($data) ? $data : array());
 
         if ($data != null) {
 
+            // Array for new UserExams (those which need to be created, not updated)
             $newUserExams = [];
 
             for ($i = 0; $i < sizeof($data['students']); $i++) {
                 $student = $this->getDoctrine()->getRepository(User::class)->find($data['students'][$i]);
+
+                // Check if there already is a UserExam for this student-exam-combination
                 $correspondingUserExams = $this->getDoctrine()->getRepository(UserExam::class)->findBy(array('exam' => $exam, 'user' => $student));
 
+                // Convert the received array into an object
                 foreach ($correspondingUserExams as $item) {
                     $correspondingUserExam = $item;
                 }
 
+                // Create a new UserExam entry if there hasn't been one yet
                 if (!$correspondingUserExams) {
                     $correspondingUserExam = new UserExam();
                     $correspondingUserExam->setUser($student);
@@ -343,10 +364,11 @@ class QuizController extends AbstractController
                     $entityManager->persist($correspondingUserExam);
                 }
 
+                // Put either the "old" or newly created UserExam into the newUserExams-Array
                 array_push($newUserExams, $correspondingUserExam);
-
             }
 
+            // Delete the UserExams that are no longer required
             for ($i = 0; $i < sizeof($existingUserExams); $i++) {
                 for ($j = 0; $j < sizeof($newUserExams); $j++) {
                     if ($existingUserExams[$i] == $newUserExams[$j]) {
@@ -358,24 +380,6 @@ class QuizController extends AbstractController
                 }
 
             }
-
-            // if (allCheckBoxes.length - 1 === i) {
-
-            /*
-            foreach ($userExams as $old) {
-                $entityManager->remove($old);
-            }
-
-            for ($i = 0; $i < sizeof($data['students']); $i++) {
-                $student = $this->getDoctrine()->getRepository(User::class)->find($data['students'][$i]);
-
-                $userExam = new UserExam();
-                $userExam->setExam($exam);
-                $userExam->setUser($student);
-                $entityManager->persist($userExam);
-
-            }
-            */
 
             $entityManager->flush();
         }

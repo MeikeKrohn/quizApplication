@@ -13,8 +13,11 @@
         {% for q in userExam.exam.questions %}
             <div class="takeExamQuestionBlock">
                 <table>
+                    <tr style="font-size: 20px;">
+                        <td style="padding-bottom: 10px; text-decoration: underline;">Result: {{ userExam.result }}%</td>
+                    </tr>
                     <tr>
-                        <td style="font-size: 30px">{{ q.questionText }}</td>
+                        <td style="font-size: 20px">{{ q.questionText }}</td>
                     </tr>
                     {% for a in q.answers %}
                             <tr>
