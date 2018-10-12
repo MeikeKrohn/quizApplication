@@ -30,9 +30,6 @@ submitExamButton.forEach(button => button.addEventListener('click', submitExamBu
 let deleteExistingAnswerButton = document.querySelectorAll('.deleteExistingAnswerButton');
 deleteExistingAnswerButton.forEach(button => button.addEventListener('click', deleteExistingAnswerButtonClicked));
 
-let chooseRandomQuestionsButton = document.querySelectorAll('.chooseRandomQuestionsButton');
-chooseRandomQuestionsButton.forEach(button => button.addEventListener('click', chooseRandomQuestionsButtonClicked));
-
 function deleteQuestionButtonClicked(event) {
     const questionId = event.target.getAttribute('data-id');
 
@@ -124,34 +121,6 @@ function deleteExistingAnswerButtonClicked(event) {
 
 }
 
-function chooseRandomQuestionsButtonClicked(event) {
-    var selection = document.getElementById('form_questions');
-    var allOptions = selection.options;
-    var numberOfOptions = allOptions.length;
-    var numberOfChoices =  numberOfOptions - numberOfOptions * (1/2);
-    var choices = [];
-
-    //Choose the indexes to be selected in the allOptions-Array randomly
-    for(let i = 0; i <= Math.floor(numberOfChoices); i++) {
-        var rand = Math.random();
-        rand *= numberOfOptions;
-        rand = Math.floor(rand);
-        choices.push(rand);
-    }
-
-    //Set the options selected that have been randomly chosen
-    for(let i = 0; i < allOptions.length; i++) {
-        allOptions[i].selected = false;
-        for(let j = 0; j < choices.length; j++) {
-            if(i == choices[j]) {
-                allOptions[i].selected = true;
-            }
-        }
-    }
-
-
-}
-
 
 var $collectionHolder;
 var $addAnswerButton = $('<button type="button" class="editAnswersButton">Add Answer</button>');
@@ -209,3 +178,36 @@ function addAnswerFormDeleteLink($answerFormLi) {
         $answerFormLi.remove();
     });
 }
+
+var $category = $('#exam_category');
+var $questions = $('#exam_questions');
+var $name = $('#exam_name');
+
+// When sport gets selected ...
+$category.change(function() {
+    console.log("something changed");
+
+    // ... retrieve the corresponding form.
+    var $form = $(this).closest('form');
+
+    // Simulate form data, but only include the selected sport value.
+    var data = {};
+    data[$category.attr('name')] = $category.val();
+    data[$questions.attr('name')] = $questions.val();
+    data[$name.attr('name')] = $name.val();
+
+    // Submit data via AJAX to the form's action path.
+    $.ajax({
+        url : $form.attr('action'),
+        type: $form.attr('method'),
+        data : data,
+        success: function(html) {
+            // Replace current position field ...
+            $('#exam_questions').replaceWith(
+                // ... with the returned one from the AJAX response.
+                $(html).find('#exam_questions')
+            );
+            // Position field now displays the appropriate positions.
+        }
+    });
+});

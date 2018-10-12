@@ -17,8 +17,9 @@
         {{ form_row(form.category) }}
 
         {% if not exam.isRandomExam %}
-        {{ form_row(form.questions) }}
-        {{ form_row(form.random) }}
+            <div class="name">
+            {{ form_row(form.questions) }}
+            </div>
         {% endif %}
 
         {{ form_row(form.save) }}

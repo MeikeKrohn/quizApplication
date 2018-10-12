@@ -15,6 +15,7 @@ use App\Entity\Exam;
 use App\Entity\Question;
 use App\Entity\User;
 use App\Entity\UserExam;
+use App\Form\Type\ExamType;
 use App\Form\Type\QuestionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -195,12 +196,6 @@ class QuizController extends AbstractController
             } else {
                 return $this->redirect($this->generateUrl('addQuestionsToExam', array('examId' => $exam->getId())));
             }
-
-            /*
-
-
-            return $this->redirect($this->generateUrl('addQuestionsToExam', array('examId' => $exam->getId())));
-            */
         }
 
         return $this->render('teacher/createExam.html.twig',
@@ -222,10 +217,6 @@ class QuizController extends AbstractController
                 'choice_label' => 'questionText',
                 'multiple' => true,
                 'by_reference' => false,
-            ))
-            ->add('random', ButtonType::class, array(
-                'label' => 'Choose randomly',
-                'attr' => array('class' => 'chooseRandomQuestionsButton')
             ))
             ->add('save', SubmitType::class, array(
                 'label' => 'Save and Continue'))
@@ -283,26 +274,14 @@ class QuizController extends AbstractController
     public function editExamQuestions(Request $request, $examId)
     {
         $activeUser = $this->getUser();
+
         $exam = $this->getDoctrine()->getRepository(Exam::class)->find($examId);
+
         $questions = $this->getDoctrine()->getRepository(Question::class)->findBy(array('category' => $exam->getCategory()));
+
         $students = $this->getDoctrine()->getRepository(User::class)->findBy(array('role' => 'ROLE_STUDENT'));
 
-        $form = $this->createFormBuilder($exam)
-            ->add('name', TextType::class)
-            ->add('category', EntityType::class, array(
-                'class' => Category::class,
-                'choice_label' => 'name'))
-            ->add('questions', EntityType::class, array(
-                'class' => Question::class,
-                'choices' => $questions,
-                'choice_label' => 'questionText',
-                'multiple' => true,
-                'by_reference' => false))
-            ->add('random', ButtonType::class, array(
-                'label' => 'Choose randomly',
-                'attr' => array('class' => 'chooseRandomQuestionsButton')))
-            ->add('save', SubmitType::class, array('label' => 'Save Exam'))
-            ->getForm();
+        $form = $this->createForm(ExamType::class, $exam);
 
         $form->handleRequest($request);
 

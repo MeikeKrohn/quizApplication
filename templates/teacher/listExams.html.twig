@@ -27,7 +27,12 @@
                         {% if c.id == e.category.id %}
                             <tr>
                                 <td>{{ e.name }}</td>
-                                <td style="text-align: center">{% if e.isRandomExam %}random{% else %}{{ e.questions | length }}{% endif %}</td>
+                                <td style="text-align: center; {% if not e.isRandomExam and e.questions | length == 0 %}color: red{% endif %}" >
+                                    {% if e.isRandomExam %}
+                                        random
+                                    {% else %}
+                                        {{ e.questions | length }}
+                                    {% endif %}</td>
                                 <td>
                                     <button style="width: 40px" data-id="{{ e.id }}" class="deleteExamButton">&#215</button>
                                     <input style="width: 80px" type="button" class="editButton" onclick="location.href='{{ path('editExamQuestions', {'examId': e.id}) }}';" value="&#9998; Content" />
