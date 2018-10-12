@@ -26,6 +26,7 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class QuizController extends AbstractController
 {
@@ -81,7 +82,8 @@ class QuizController extends AbstractController
         return $this->render('teacher/createQuestion.html.twig',
             array(
                 'activeUser' => $activeUser,
-                'form' => $form->createView()));
+                'form' => $form->createView()
+            ));
 
     }
 

@@ -13,6 +13,7 @@ use App\Entity\Answer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Button;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -24,22 +25,18 @@ class AnswerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-
-        /*
-        $builder->add('delete', ButtonType::class,
+        $builder->add('answerText', TextType::class,
             array(
-                'attr' => array(
-                    'class' => 'deleteExistingAnswerButton')
+                'error_bubbling' => true
             ));
-        */
-
-        $builder->add('answerText');
         $builder->add('isCorrect', ChoiceType::class,
             array(
                 'choices' => array(
                     'yes' => true,
                     'no' => false),
-                'multiple' => false, 'expanded' => true
+                'multiple' => false,
+                'expanded' => true,
+                'error_bubbling' => true
             ));
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {

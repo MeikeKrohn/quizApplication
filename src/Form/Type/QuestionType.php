@@ -14,6 +14,7 @@ use App\Entity\Question;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -22,11 +23,14 @@ class QuestionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('questionText');
+        $builder->add('questionText', TextType::class, array(
+            'error_bubbling' => true
+        ));
 
         $builder->add('category', EntityType::class, array(
             'class' => Category::class,
-            'choice_label' => 'name'
+            'choice_label' => 'name',
+            'error_bubbling' => true
         ));
 
         $builder->add('answers', CollectionType::class, array(
@@ -35,6 +39,7 @@ class QuestionType extends AbstractType
             'allow_add' => true,
             'by_reference' => false,
             'allow_delete' => true,
+            'error_bubbling' => true
         ));
 
         $builder->add('save', SubmitType::class, array(

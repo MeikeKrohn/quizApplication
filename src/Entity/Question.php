@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\QuestionRepository")
@@ -147,5 +148,35 @@ class Question
         $this->category = $category;
 
         return $this;
+    }
+
+    /**
+     * @Assert\IsTrue(message="The question has to have at least two answers.")
+     */
+    public function hasAnswers()
+    {
+        if (sizeof($this->getAnswers()) >= 2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @Assert\IsTrue(message="The question has to have at least one true answer.")
+     */
+    public function hasTrueAnswer()
+    {
+        $hasTrueAnswer = false;
+
+        if ($this->getAnswers() != null) {
+            foreach ($this->getAnswers() as $answer) {
+                if ($answer->getIsCorrect()) {
+                    $hasTrueAnswer = true;
+                }
+            }
+        }
+
+        return $hasTrueAnswer;
     }
 }

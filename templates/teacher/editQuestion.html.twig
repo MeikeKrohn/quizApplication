@@ -12,14 +12,16 @@
 
     <div class="editQuestionForm">
         {{ form_start(form) }}
+        {{ form_errors(form) }}
         {{ form_row(form.category) }}
         {{ form_row(form.questionText) }}
 
         Answers:
         <ul class="answers" data-prototype="{{ form_widget(form.answers.vars.prototype)|e('html_attr') }}">
 
-            {% for answer in answers %}
-                {{ form_widget(form.answers) }}
+            {% for answer in form.answers %}
+                {{ form_row(answer) }}
+                <hr style="width: 90%; margin-left: 0">
             {% endfor %}
         </ul>
 
