@@ -1,11 +1,52 @@
 {% extends 'baseLoggedIn.html.twig' %}
 
 {% block content %}
-    <div align="center">
-        <h3>Welcome to ExamIt</h3>
-
-        <p>
-            Hello {{ activeUser.firstname }},<br>check your pending exams.
-        </p>
+    <div class="caption">
+        Welcome to ExamIT
     </div>
+
+    <div class="actionFieldTopText">
+        &ndash; Your Online Examination App &ndash;
+    </div>
+
+    <div class="dashboard">
+        <table class="displayUserDataTable">
+            <tr>
+                <td>
+                    Username:
+                </td>
+                <td>
+                    {{ activeUser.username }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Name:
+                </td>
+                <td>
+                    {{ activeUser.firstname }} {{ activeUser.lastname }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    E-Mail:
+                </td>
+                <td>
+                    {{ activeUser.email }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Role:
+                </td>
+                <td>
+                    {% if activeUser.role == 'ROLE_STUDENT' %}Student{% else %}Teacher{% endif %}
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+
 {% endblock %}

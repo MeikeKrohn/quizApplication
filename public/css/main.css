@@ -79,7 +79,7 @@ header::after{
 .orangeButton,
 .submitExamButton,
 .addStudentsToExamButton{
-    width: 170px;
+    width: 150px;
     background: var(--orange);
     border: 1.5px solid var(--dark-grey);
     color: var(--dark-grey);
@@ -204,6 +204,14 @@ summary {
 .questionList {
     margin-left: 110px;
     padding-top: 30px;
+}
+
+.dashboard {
+    margin-left: 110px;
+}
+
+.displayUserDataTable td {
+    width: 100px;
 }
 
 .questionListTable {
