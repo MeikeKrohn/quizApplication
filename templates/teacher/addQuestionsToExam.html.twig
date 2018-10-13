@@ -2,18 +2,28 @@
 
 {% block content %}
 
-    <div class="caption">
-        Add Questions To Your Exam
-    </div>
+    {% if activeUser == exam.owner %}
 
-    <div class="actionFieldTopText">
-        Please, complete the form below.
-    </div>
+        <div class="caption">
+            Add Questions To Your Exam
+        </div>
 
-    <div class="editContentFrame">
-        {{ form_start(form) }}
-        {{ form_row(form.questions) }}
-        {{ form_row(form.save) }}
-        {{ form_end(form) }}
-    </div>
+        <div class="actionFieldTopText">
+            Please, complete the form below.
+        </div>
+
+        <div class="editContentFrame">
+            {{ form_start(form) }}
+            {{ form_row(form.questions) }}
+            {{ form_row(form.save) }}
+            {{ form_end(form) }}
+        </div>
+
+
+    {% else %}
+        <div class="caption">
+            You do not have access rights to this exam.
+        </div>
+    {% endif %}
+
 {% endblock %}

@@ -1,72 +1,82 @@
 {% extends 'baseLoggedIn.html.twig' %}
 
 {% block content %}
-    <div class="caption">
-        Your Result
-    </div>
-
-    <div class="actionFieldTopText">
-        in {{ userExam.exam.name }}
-    </div>
-    <div class="annotation">
-        (correct answers written in blue)
-    </div>
-
-    <div class="editContentFrame">
-
-        <div class="detailedResultDisplayResult">
-            Your Result: {{ userExam.result }}%
+    {% if activeUser == userExam.user and userExam.result is not null %}
+        <div class="caption">
+            Your Result
         </div>
 
-        {% if userExam.exam.isRandomExam and questions is defined %}
+        <div class="actionFieldTopText">
+            in {{ userExam.exam.name }}
+        </div>
+        <div class="annotation">
+            (correct answers written in blue)
+        </div>
 
-            {% for q in questions %}
-                <div class="detailedResultQuestionAnswerBlock">
-                    <div class="detailedResultQuestionText">
-                        {{ q.questionText }}
+        <div class="editContentFrame">
+
+            <div class="detailedResultDisplayResult">
+                Your Result: {{ userExam.result }}%
+            </div>
+
+            {% if userExam.exam.isRandomExam and questions is defined %}
+
+                {% for q in questions %}
+                    <div class="detailedResultQuestionAnswerBlock">
+                        <div class="detailedResultQuestionText">
+                            {{ q.questionText }}
+                        </div>
+
+                        <table class="detailedResultAnswerBlock">
+                            {% for a in q.answers %}
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/>
+                                    </td>
+                                    <td style="{% if a.isCorrect %}font-weight: bold; color: #76C7F2; {% endif %} padding-left: 5px;">
+                                        {{ a.answerText }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
                     </div>
+                {% endfor %}
 
-                    <table class="detailedResultAnswerBlock">
-                        {% for a in q.answers %}
-                            <tr>
-                                <td>
-                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/>
-                                </td>
-                                <td style="{% if a.isCorrect %}font-weight: bold; color: #76C7F2; {% endif %} padding-left: 5px;">
-                                    {{ a.answerText }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-            {% endfor %}
+            {% else %}
 
-        {% else %}
+                {% for q in userExam.exam.questions %}
+                    <div class="takeExamQuestionAnswerBlock">
+                        <div class="takeExamQuestionText">
+                            {{ q.questionText }}
+                        </div>
 
-            {% for q in userExam.exam.questions %}
-                <div class="takeExamQuestionAnswerBlock">
-                    <div class="takeExamQuestionText">
-                        {{ q.questionText }}
+                        <table class="takeExamAnswerBlock">
+                            {% for a in q.answers %}
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/>
+                                    </td>
+                                    <td style="{% if a.isCorrect %}font-weight: bold; color: #76C7F2; {% endif %} padding-left: 5px; ">
+                                        {{ a.answerText }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
                     </div>
+                {% endfor %}
 
-                    <table class="takeExamAnswerBlock">
-                        {% for a in q.answers %}
-                            <tr>
-                                <td>
-                                    <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/>
-                                </td>
-                                <td style="{% if a.isCorrect %}font-weight: bold; color: #76C7F2; {% endif %} padding-left: 5px; ">
-                                    {{ a.answerText }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-            {% endfor %}
+            {% endif %}
+            <button class="orangeButton" data-id="{{ userExam.id }}" style="font-size: 12px" onclick="location.href='{{ path('listStudentsResults') }}'">Continue to Overview</button>
 
-        {% endif %}
-        <button class="orangeButton" data-id="{{ userExam.id }}" style="font-size: 12px" onclick="location.href='{{ path('listStudentsResults')}}'">Continue to Overview</button>
+        </div>
 
-    </div>
-
+    {% elseif activeUser == userExam.user and userExam.result is null %}
+        <div class="caption">
+            No detailed result available for this exam yet.
+        </div>
+    {% else %}
+        <div class="caption">
+            You do not have access rights to this exam.
+        </div>
+    {% endif %}
 {% endblock %}

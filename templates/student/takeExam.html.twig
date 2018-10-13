@@ -1,6 +1,7 @@
 {% extends 'baseLoggedIn.html.twig' %}
 
 {% block content %}
+    {% if activeUser == userExam.user and userExam.result is null %}
         <div class="caption">
             {{ userExam.exam.name }}
         </div>
@@ -62,4 +63,13 @@
             <button class="submitExamButton" data-id="{{ userExam.id }}">Submit</button>
 
         </div>
+    {% elseif activeUser == userExam.user and userExam.result is not null %}
+        <div class="caption">
+            You already completed this exam.
+        </div>
+    {% else %}
+        <div class="caption">
+            You do not have access rights to this exam.
+        </div>
+    {% endif %}
 {% endblock %}

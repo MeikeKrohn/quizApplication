@@ -2,18 +2,20 @@
 
 {% block content %}
 
-    <div class="caption">
-        {{ exam.name }}
-    </div>
+    {% if activeUser == exam.owner %}
 
-    <div class="actionFieldTopText">
-        Please, choose the students to take the exam.
-    </div>
+        <div class="caption">
+            {{ exam.name }}
+        </div>
 
-    <div class="editContentFrame">
-        <table class="listStudentsTable" id='exam' data-id="{{ exam.id }}">
-            <tbody>
-            {% for s in allStudents %}
+        <div class="actionFieldTopText">
+            Please, choose the students to take the exam.
+        </div>
+
+        <div class="editContentFrame">
+            <table class="listStudentsTable" id='exam' data-id="{{ exam.id }}">
+                <tbody>
+                {% for s in allStudents %}
                     <tr>
                         <td style="width: 50px">
                             <input type="checkbox" data-id="{{ s.id }}" class="selectStudentCheckBox" {% if s in assignedStudents %}checked="checked"{% endif %}/>
@@ -23,10 +25,16 @@
                             <td style="font-size: 10px">(Attention: Student already took exam)</td>
                         {% endif %}
                     </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <button class="addStudentsToExamButton" name="edit">Submit</button>
-    </div>
+                {% endfor %}
+                </tbody>
+            </table>
+            <button class="addStudentsToExamButton" name="edit">Submit</button>
+        </div>
+
+    {% else %}
+        <div class="caption">
+            You do not have access rights to this exam.
+        </div>
+    {% endif %}
 
 {% endblock %}

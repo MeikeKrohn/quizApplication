@@ -1,7 +1,7 @@
 {% extends 'baseLoggedIn.html.twig' %}
 
 {% block content %}
-
+    {% if activeUser == exam.owner %}
     <div class="caption">
         Edit Exam Content
     </div>
@@ -18,7 +18,7 @@
 
         {% if not exam.isRandomExam %}
             <div class="name">
-            {{ form_row(form.questions) }}
+                {{ form_row(form.questions) }}
             </div>
         {% endif %}
 
@@ -26,5 +26,11 @@
 
         {{ form_end(form, {'render_rest': false}) }}
     </div>
+
+    {% else %}
+        <div class="caption">
+            You do not have access rights to this exam.
+        </div>
+    {% endif %}
 
 {% endblock %}

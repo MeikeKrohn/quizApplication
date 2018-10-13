@@ -53,6 +53,7 @@ editExamStudents:
 deleteExam:
   path: /teacher/exam/delete/{examId}
   controller: App\Controller\QuizController:deleteExam
+  methods: [DELETE]
 
 addQuestionsToExam:
   path: /teacher/exam/create/questions/{examId}

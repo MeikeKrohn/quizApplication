@@ -2,25 +2,34 @@
 
 {% block content %}
 
-    <div class="caption">
-        Choose the students to take your exam.
-    </div>
+    {% if activeUser == exam.owner %}
 
-    <div class="actionFieldTopText">
-        Check or uncheck the boxes next to the students' names.
-    </div>
+        <div class="caption">
+            Choose the students to take your exam.
+        </div>
 
-    <div class="editContentFrame">
-        <table class="listStudentsTable" id='exam' data-id="{{ examId }}">
-            <tbody>
-            {% for s in students %}
-                <tr>
-                    <td style="width: 50px"><input type="checkbox" data-id="{{ s.id }}" class="selectStudentCheckBox" /></td>
-                    <td>{{ s.firstname }} {{ s.lastname }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <button class="addStudentsToExamButton" name="create">Submit</button>
-    </div>
+        <div class="actionFieldTopText">
+            Check or uncheck the boxes next to the students' names.
+        </div>
+
+        <div class="editContentFrame">
+            <table class="listStudentsTable" id='exam' data-id="{{ examId }}">
+                <tbody>
+                {% for s in students %}
+                    <tr>
+                        <td style="width: 50px">
+                            <input type="checkbox" data-id="{{ s.id }}" class="selectStudentCheckBox"/></td>
+                        <td>{{ s.firstname }} {{ s.lastname }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <button class="addStudentsToExamButton" name="create">Submit</button>
+        </div>
+
+    {% else %}
+        <div class="caption">
+            You do not have access rights to this exam.
+        </div>
+    {% endif %}
 {% endblock %}
