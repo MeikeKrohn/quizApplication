@@ -176,11 +176,9 @@ class Exam
         $questionsAvailable = false;
         $questions = $this->getOwner()->getQuestions();
 
-        if ($this->getIsRandomExam()) {
-            foreach($questions as $question) {
-                if($question->getCategory() == $this->getCategory()) {
-                    $questionsAvailable = true;
-                }
+        foreach ($questions as $question) {
+            if ($question->getCategory() == $this->getCategory()) {
+                $questionsAvailable = true;
             }
         }
 
