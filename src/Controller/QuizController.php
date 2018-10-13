@@ -165,7 +165,9 @@ class QuizController extends AbstractController
         $exam->setOwner($activeUser);
 
         $form = $this->createFormBuilder($exam)
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, array(
+                'trim' => true
+            ))
             ->add('category', EntityType::class, array(
                 'class' => Category::class,
                 'choice_label' => 'name'))

@@ -9,15 +9,15 @@
         <input type="button" class="orangeButton" onclick="location.href='{{ path('createQuestion') }}';" value="&plus;  New Question" />
     </div>
 
-    <div class="questionList">
+    <div class="foldableList">
         {% for c in categories %}
     <details open="open">
         <summary>{{ c.name }}</summary>
 
-            <table class="questionListTable">
+            <table class="foldableListTable">
                 <thead>
                 <tr>
-                    <th style="width: 70%; height: 45px">Question</th>
+                    <th>Question</th>
                     <th>Answers</th>
                     <th>Actions</th>
                 </tr>
@@ -26,10 +26,10 @@
                     {% for q in questions %}
                         {% if c.id == q.category.id %}
                         <tr>
-                            <td>{{ q.questionText }}</td>
+                            <td style="width: 50%">{{ q.questionText }}</td>
                             <td style="text-align: center">{{ q.answers | length }}</td>
                             <td>
-                                <button style="width: 40px" data-id="{{ q.id }}" class="deleteQuestionButton">&#215</button>
+                                <button style="width: 40px" data-id="{{ q.id }}" class="deleteQuestionButton" data-confirm="Are you sure you want to delete this Question?">&#215</button>
                                 <input style="width: 90px" type="button" class="editButton" onclick="location.href='{{ path('editQuestion', {'questionId': q.id}) }}';" value="&#9998; Question" />
                             </td>
                         </tr>

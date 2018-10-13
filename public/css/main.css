@@ -28,14 +28,14 @@ body {
     color: var(--dark-grey);
 }
 
-.login-box h1{
+.login-box h1 {
     font-size: 40px;
     border-bottom: 3px solid var(--intense-blue);
     margin-bottom: 50px;
     padding: 13px 0;
 }
 
-.textbox {
+.loginTextbox {
     width: 100%;
     overflow: hidden;
     font-size: 20px;
@@ -44,13 +44,13 @@ body {
     border-bottom: 1px solid var(--intense-blue);
 }
 
-.textbox i {
+.loginTextbox i {
     width: 26px;
     float: left;
     text-align: center;
 }
 
-.textbox input {
+.loginTextbox input {
     border: none;
     outline: none;
     background: none;
@@ -61,7 +61,7 @@ body {
     margin: 0 10px;
 }
 
-.container {
+.baseLoggedInContainer {
     width: 80%;
     margin: 0 auto;
 }
@@ -70,65 +70,10 @@ header {
     background: var(--intense-blue);
 }
 
-header::after{
+header::after {
     content: '';
     display: table;
     clear: both;
-}
-
-.orangeButton,
-.submitExamButton,
-.addStudentsToExamButton{
-    width: 150px;
-    background: var(--orange);
-    border: 1.5px solid var(--dark-grey);
-    color: var(--dark-grey);
-    padding: 5px;
-    cursor: pointer;
-    margin: 12px 0;
-    font-weight: bold;
-}
-
-.orangeButton:hover,
-.submitExamButton:hover,
-.addStudentsToExamButton:hover {
-    background: var(--dark-orange);
-}
-
-.editButton,
-.deleteQuestionButton,
-.deleteExamButton,
-.takeExamButton,
-.deleteExistingAnswerButton{
-    background: var(--orange);
-    border: 1.5px solid var(--dark-grey);
-    color: var(--dark-grey);
-    padding: 5px;
-    cursor: pointer;
-    margin: 4px 0;
-    font-weight: bold;
-    font-size: 10px;
-}
-
-.editAnswersButton {
-    background: var(--orange);
-    width: 100px;
-    border: 1.5px solid var(--dark-grey);
-    color: var(--dark-grey);
-    padding: 5px;
-    cursor: pointer;
-    margin: 4px 0;
-    font-weight: bold;
-    font-size: 10px;
-}
-
-.editButton:hover,
-.deleteQuestionButton:hover,
-.editAnswersButton:hover,
-.deleteExamButton:hover,
-.takeExamButton:hover,
-.deleteExistingAnswerButton:hover {
-    background: var(--dark-orange);
 }
 
 .logo {
@@ -169,6 +114,78 @@ nav a:hover {
     color: var(--font-hover);
 }
 
+.orangeButton,
+.submitExamButton,
+.addStudentsToExamButton {
+    width: 150px;
+    background: var(--orange);
+    border: 1.5px solid var(--dark-grey);
+    color: var(--dark-grey);
+    padding: 5px;
+    cursor: pointer;
+    margin: 12px 0;
+    font-weight: bold;
+}
+
+.editButton,
+.deleteQuestionButton,
+.deleteExamButton,
+.takeExamButton,
+.deleteExistingAnswerButton {
+    background: var(--orange);
+    border: 1.5px solid var(--dark-grey);
+    color: var(--dark-grey);
+    padding: 5px;
+    cursor: pointer;
+    margin: 4px 0;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+.editAnswersButton {
+    background: var(--orange);
+    width: 100px;
+    border: 1.5px solid var(--dark-grey);
+    color: var(--dark-grey);
+    padding: 5px;
+    cursor: pointer;
+    margin: 4px 0;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+.editButton:hover,
+.deleteQuestionButton:hover,
+.editAnswersButton:hover,
+.deleteExamButton:hover,
+.takeExamButton:hover,
+.deleteExistingAnswerButton:hover,
+.orangeButton:hover,
+.submitExamButton:hover,
+.addStudentsToExamButton:hover {
+    background: var(--dark-orange);
+}
+
+.selectStudentCheckBox,
+.selectAnswerCheckBoxActive,
+.selectAnswerCheckBoxPassive {
+    -webkit-appearance: none;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: var(--light-blue);
+}
+
+.selectAnswerCheckBoxPassive {
+    pointer-events: none;
+}
+
+.selectStudentCheckBox:checked,
+.selectAnswerCheckBoxActive:checked,
+.selectAnswerCheckBoxPassive:checked {
+    background-color: var(--intense-blue);
+}
 
 .caption {
     display: flex;
@@ -195,17 +212,6 @@ nav a:hover {
     font-size: 20px;
 }
 
-summary {
-    font-size: 20px;
-    cursor: pointer;
-    margin: 10px 10px 0 0 ;
-}
-
-.questionList {
-    margin-left: 110px;
-    padding-top: 30px;
-}
-
 .dashboard {
     margin-left: 110px;
 }
@@ -214,20 +220,44 @@ summary {
     width: 100px;
 }
 
-.questionListTable {
+summary {
+    font-size: 20px;
+    cursor: pointer;
+    margin: 10px 10px 0 0;
+}
+
+details > summary::-webkit-details-marker {
+    font-size: 15px;
+    color: var(--intense-blue);
+}
+
+.nestedSummary {
+    margin-left: 20px;
+}
+
+.foldableList {
+    margin-left: 110px;
+    padding-top: 30px;
+}
+
+.foldableListTable {
     width: 90%;
 }
 
-.questionListTable thead {
+.foldableListTable thead {
     height: 50px;
     text-align: left;
     font-size: 14px;
 }
 
-.questionListTable td {
-    height: 30px;
+.foldableListTable td {
+    height: 41px;
     padding: 5px 5px 0 0;
     text-align: left;
+}
+
+.foldableListTable th {
+    height: 45px;
 }
 
 .listStudentsTable td {
@@ -235,38 +265,13 @@ summary {
     padding: 5px 5px 0 0;
 }
 
-.editQuestionForm {
+.editContentFrame {
     margin-left: 110px;
     margin-right: 110px;
 }
 
 .answers {
     list-style: none;
-}
-
-.nestedSummary {
-    margin-left: 20px;
-}
-
-.selectStudentCheckBox,
-.selectAnswerCheckBoxActive,
-.selectAnswerCheckBoxPassive{
-    -webkit-appearance: none;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: var(--light-blue);
-}
-
-.selectAnswerCheckBoxPassive {
-    pointer-events: none;
-}
-
-.selectStudentCheckBox:checked,
-.selectAnswerCheckBoxActive:checked,
-.selectAnswerCheckBoxPassive:checked {
-    background-color: var(--intense-blue);
 }
 
 .takeExamQuestionAnswerBlock {

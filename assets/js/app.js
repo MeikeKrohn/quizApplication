@@ -33,16 +33,24 @@ deleteExistingAnswerButton.forEach(button => button.addEventListener('click', de
 function deleteQuestionButtonClicked(event) {
     const questionId = event.target.getAttribute('data-id');
 
-    // send the HTTP REQ
-    axios.delete('/teacher/question/delete/' + questionId)
-        .then(response => location.reload());
+    var choice = confirm(this.getAttribute('data-confirm'));
+
+    if (choice) {
+        // send the HTTP REQ
+        axios.delete('/teacher/question/delete/' + questionId)
+            .then(response => location.reload());
+    }
 }
 
 function deleteExamButtonClicked(event) {
     const examId = event.target.getAttribute('data-id');
 
-    axios.delete('/teacher/exam/delete/' + examId)
-        .then(response => location.reload());
+    var choice = confirm(this.getAttribute('data-confirm'));
+
+    if (choice) {
+        axios.delete('/teacher/exam/delete/' + examId)
+            .then(response => location.reload());
+    }
 }
 
 function addStudentsToExamButtonClicked(event) {
@@ -50,14 +58,14 @@ function addStudentsToExamButtonClicked(event) {
     const allCheckBoxes = document.getElementsByClassName('selectStudentCheckBox');
     const checkedCheckBoxes = [];
 
-    if(allCheckBoxes.length > 0) {
+    if (allCheckBoxes.length > 0) {
         for (let i = 0; i < allCheckBoxes.length; i++) {
             if (allCheckBoxes[i].checked) {
                 checkedCheckBoxes.push(parseInt(allCheckBoxes[i].getAttribute('data-id')));
             }
 
             if (allCheckBoxes.length - 1 === i) {
-                if(checkedCheckBoxes.length == 0) {
+                if (checkedCheckBoxes.length == 0) {
                     event.preventDefault();
                     alert("Select at least one student");
                 } else if (event.target.getAttribute('name') == 'create') {
@@ -93,7 +101,7 @@ function submitExamButtonClicked(event) {
             var answerId = parseInt(allCheckBoxes[i].getAttribute('data-id'));
             var isChecked = allCheckBoxes[i].checked;
 
-            var answer = {'answerId' : answerId, 'isChecked' : isChecked};
+            var answer = {'answerId': answerId, 'isChecked': isChecked};
 
             givenAnswers.push(answer);
 
@@ -114,10 +122,13 @@ function deleteExistingAnswerButtonClicked(event) {
     event.preventDefault();
     const answerId = event.target.getAttribute('data-id');
 
-    console.log(answerId);
 
-    axios.delete('/teacher/question/answer/delete/' + answerId)
-        .then(response => location.reload());
+    var choice = confirm(this.getAttribute('data-confirm'));
+
+    if (choice) {
+        axios.delete('/teacher/question/answer/delete/' + answerId)
+            .then(response => location.reload());
+    }
 
 }
 
@@ -184,7 +195,7 @@ var $questions = $('#exam_questions');
 var $name = $('#exam_name');
 
 // When sport gets selected ...
-$category.change(function() {
+$category.change(function () {
     console.log("something changed");
 
     // ... retrieve the corresponding form.
@@ -198,10 +209,10 @@ $category.change(function() {
 
     // Submit data via AJAX to the form's action path.
     $.ajax({
-        url : $form.attr('action'),
+        url: $form.attr('action'),
         type: $form.attr('method'),
-        data : data,
-        success: function(html) {
+        data: data,
+        success: function (html) {
             // Replace current position field ...
             $('#exam_questions').replaceWith(
                 // ... with the returned one from the AJAX response.

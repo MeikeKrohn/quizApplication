@@ -27,7 +27,8 @@ class AnswerType extends AbstractType
 
         $builder->add('answerText', TextType::class,
             array(
-                'error_bubbling' => true
+                'error_bubbling' => true,
+                'trim' => true
             ));
         $builder->add('isCorrect', ChoiceType::class,
             array(
@@ -43,9 +44,13 @@ class AnswerType extends AbstractType
             $data = $event->getData();
             $form = $event->getForm();
 
-            if($data != null) {
+            if ($data != null) {
                 $form->add('delete', ButtonType::class, array(
-                    'attr' => array('data-id' => $data->getId(), 'class' => 'deleteExistingAnswerButton')
+                    'attr' => array(
+                        'data-id' => $data->getId(),
+                        'class' => 'deleteExistingAnswerButton',
+                        'data-confirm' => 'Are you sure you want to delete this Answer?'
+                    )
                 ));
             }
         });

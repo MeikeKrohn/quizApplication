@@ -5,12 +5,12 @@
         Your Results
     </div>
 
-    <div class="questionList">
+    <div class="foldableList">
         {% for c in categories %}
             <details open="open">
                 <summary>{{ c.name }}</summary>
 
-                <table class="questionListTable">
+                <table class="foldableListTable">
                     <thead>
                     <tr>
                         <th style="width: 70%; height: 45px">Exam</th>
@@ -23,7 +23,7 @@
                             {% if c.id == e.exam.category.id %}
                                 <tr>
                                     <td>{{ e.exam.name }}</td>
-                                    <td>{% if e.result is null %}No result available{% else %}{{ e.result }} %{% endif %}</td>
+                                    <td>{% if e.result is null %}N/A{% else %}{{ e.result }} %{% endif %}</td>
                                 </tr>
                             {% endif %}
                         {% endif %}

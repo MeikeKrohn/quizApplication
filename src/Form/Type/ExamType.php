@@ -27,7 +27,9 @@ class ExamType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name');
+        $builder->add('name', TextType::class, array(
+            'trim' => true
+        ));
 
         $builder->add('category', EntityType::class, array(
             'class' => Category::class,

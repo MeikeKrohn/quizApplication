@@ -13,17 +13,17 @@
         See how students performed on your exams.
     </div>
 
-    <div class="questionList">
+    <div class="foldableList">
         {% for c in categories %}
             <details open="open">
                 <summary>{{ c.name }}</summary>
 
                 {% for e in exams %}
                     {% if c.id == e.category.id %}
-                        <details>
+                        <details style="margin-bottom: 30px" open="open">
                             <summary class="nestedSummary">{{ e.name }}</summary>
 
-                            <table style="margin-left: 20px" class="questionListTable">
+                            <table style="margin-left: 35px" class="foldableListTable">
                                 <thead>
                                 <tr>
                                     <th>Student</th>
@@ -39,13 +39,13 @@
                                             {% set counter = counter + 1 %}
                                         {% endif %}
                                         <tr>
-                                            <td>{{ ue.user.firstname }} {{ ue.user.lastname }}</td>
+                                            <td style="width: 50%">{{ ue.user.firstname }} {{ ue.user.lastname }}</td>
                                             {% if ue.result is null %}
-                                                <td>
-                                                    No result available
+                                                <td style="width: 20%">
+                                                    N/A
                                                 </td>
                                             {% else %}
-                                                <td>{{ ue.result }}%</td>
+                                                <td style="width: 20%">{{ ue.result }}%</td>
                                                 <td>
                                                     <input style="width: 80px" type="button" class="editButton" onclick="location.href='{{ path('showTeacherDetailedResult', {'userExamId': ue.id}) }}';" value="Details"/>
                                                 </td>
