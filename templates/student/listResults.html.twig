@@ -13,9 +13,9 @@
                 <table class="foldableListTable">
                     <thead>
                     <tr>
-                        <th style="width: 70%; height: 45px">Exam</th>
-                        <th>Result</th>
-                        <th>Actions</th>
+                        <th style="width: 50%; height: 45px">Exam</th>
+                        <th style="width: 15%; text-align: center">Result</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -24,7 +24,7 @@
                             {% if c.id == ue.exam.category.id %}
                                 <tr>
                                     <td>{{ ue.exam.name }}</td>
-                                    <td>{% if ue.result is null %}N/A{% else %}{{ ue.result }} %{% endif %}</td>
+                                    <td style="text-align: center">{% if ue.result is null %}N/A{% else %}{{ ue.result }} %{% endif %}</td>
                                     {% if ue.result is not null %}
                                         <td>
                                             <input style="width: 80px" type="button" class="editButton" onclick="location.href='{{ path('detailedExamResult', {'userExamId': ue.id}) }}';" value="Details"/>

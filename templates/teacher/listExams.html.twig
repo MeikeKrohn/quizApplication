@@ -17,18 +17,22 @@
                 <table class="foldableListTable">
                     <thead>
                     <tr>
-                        <th>Exam</th>
-                        <th>Questions</th>
-                        <th>Actions</th>
+                        <th style="width: 50%">Exam</th>
+                        <th style="width: 15%; text-align: center">Questions</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for e in exams %}
                         {% if c.id == e.category.id %}
                             <tr>
-                                <td style="width: 50%">{{ e.name }}</td>
-                                <td style="text-align: center; {% if not e.isRandomExam and e.questions | length == 0 %}color: red{% endif %}" >
-                                    {% if e.isRandomExam %}
+                                <td>{{ e.name }}</td>
+                                <td style="text-align: center;">
+                                    {% if not e.isRandomExam and e.questions | length == 0 %}
+                                        <span title="This exam has no questions yet">&#9888; 0</span>
+                                    {% elseif e.isRandomExam and e.category.questions | length == 0 %}
+                                        <span title="You don't have questions in this category yet">&#9888; Random</span>
+                                    {% elseif e.isRandomExam %}
                                         random
                                     {% else %}
                                         {{ e.questions | length }}

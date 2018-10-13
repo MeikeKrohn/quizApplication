@@ -114,6 +114,11 @@ nav a:hover {
     color: var(--font-hover);
 }
 
+span {
+    color: var(--dark-orange);
+    font-weight: bold;
+}
+
 .orangeButton,
 .submitExamButton,
 .addStudentsToExamButton {

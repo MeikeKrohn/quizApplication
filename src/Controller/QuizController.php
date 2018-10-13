@@ -210,7 +210,7 @@ class QuizController extends AbstractController
     {
         $activeUser = $this->getUser();
         $exam = $this->getDoctrine()->getRepository(Exam::class)->find($examId);
-        $questions = $this->getDoctrine()->getRepository(Question::class)->findBy(array('category' => $exam->getCategory()));
+        $questions = $this->getDoctrine()->getRepository(Question::class)->findBy(array('category' => $exam->getCategory(), 'owner' => $activeUser));
 
         $form = $this->createFormBuilder($exam)
             ->add('questions', EntityType::class, array(
@@ -269,7 +269,7 @@ class QuizController extends AbstractController
             array(
                 'activeUser' => $activeUser,
                 'students' => $students,
-                'examId' => $examId,
+                'exam' => $exam
             ));
     }
 
@@ -279,7 +279,7 @@ class QuizController extends AbstractController
 
         $exam = $this->getDoctrine()->getRepository(Exam::class)->find($examId);
 
-        $questions = $this->getDoctrine()->getRepository(Question::class)->findBy(array('category' => $exam->getCategory()));
+        $questions = $this->getDoctrine()->getRepository(Question::class)->findBy(array('category' => $exam->getCategory(), 'owner' => $activeUser));
 
         $students = $this->getDoctrine()->getRepository(User::class)->findBy(array('role' => 'ROLE_STUDENT'));
 
@@ -489,14 +489,13 @@ class QuizController extends AbstractController
         $chosenQuestions = [];
 
         if($userExam->getExam()->getIsRandomExam()) {
-            $allQuestions = $this->getDoctrine()->getRepository(Question::class)->findBy(array('category' => $userExam->getExam()->getCategory()));
+            $allQuestions = $this->getDoctrine()->getRepository(Question::class)->findBy(array('category' => $userExam->getExam()->getCategory(), 'owner' => $userExam->getExam()->getOwner()));
 
             $max = mt_rand(1, sizeOf($allQuestions));
 
             shuffle($allQuestions);
             $chosenQuestions = array_slice($allQuestions, 0, $max);
         }
-
 
         $entityManager = $this->getDoctrine()->getManager();
 

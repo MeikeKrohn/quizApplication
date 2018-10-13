@@ -17,16 +17,16 @@
             <table class="foldableListTable">
                 <thead>
                 <tr>
-                    <th>Question</th>
-                    <th>Answers</th>
-                    <th>Actions</th>
+                    <th style="width: 50%">Question</th>
+                    <th style="width: 15%; text-align: center;">Answers</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                     {% for q in questions %}
                         {% if c.id == q.category.id %}
                         <tr>
-                            <td style="width: 50%">{{ q.questionText }}</td>
+                            <td>{{ q.questionText }}</td>
                             <td style="text-align: center">{{ q.answers | length }}</td>
                             <td>
                                 <button style="width: 40px" data-id="{{ q.id }}" class="deleteQuestionButton" data-confirm="Are you sure you want to delete this Question?">&#215</button>
