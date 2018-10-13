@@ -30,7 +30,7 @@
                                 <td style="text-align: center;">
                                     {% if not e.isRandomExam and e.questions | length == 0 %}
                                         <span title="This exam has no questions yet">&#9888; 0</span>
-                                    {% elseif e.isRandomExam and e.category.questions | length == 0 %}
+                                    {% elseif e.isRandomExam and e.category not in availableCategories %}
                                         <span title="You don't have questions in this category yet">&#9888; Random</span>
                                     {% elseif e.isRandomExam %}
                                         random

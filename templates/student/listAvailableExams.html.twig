@@ -20,7 +20,6 @@
                     </thead>
                     <tbody>
                     {% for e in userExams %}
-                        {% if  e.exam.questions is not empty or e.exam.isRandomExam %}
                             {% if c.id == e.exam.category.id %}
                                 <tr>
                                     <td>{{ e.exam.name }}</td>
@@ -30,7 +29,7 @@
                                     </td>
                                 </tr>
                             {% endif %}
-                        {% endif %}
+
                     {% endfor %}
                     </tbody>
                 </table>

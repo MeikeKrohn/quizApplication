@@ -12,6 +12,7 @@
 
     <div class="editContentFrame">
         {{ form_start(form) }}
+        {{ form_errors(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.category) }}
         {{ form_row(form.isRandomExam) }}

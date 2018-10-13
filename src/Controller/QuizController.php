@@ -153,8 +153,19 @@ class QuizController extends AbstractController
         $exams = $this->getDoctrine()
             ->getRepository(Exam::class)->findBy(array('owner' => $activeUser));
 
+        $availableCategories = [];
+
+        foreach ($activeUser->getQuestions() as $question) {
+            array_push($availableCategories, $question->getCategory());
+        }
+
         return $this->render('teacher/listExams.html.twig',
-            array('activeUser' => $activeUser, 'categories' => $categories, 'exams' => $exams));
+            array(
+                'activeUser' => $activeUser,
+                'categories' => $categories,
+                'exams' => $exams,
+                'availableCategories' => $availableCategories
+            ));
     }
 
     public function createExam(Request $request)
@@ -193,7 +204,7 @@ class QuizController extends AbstractController
             $entityManager->persist($exam);
             $entityManager->flush();
 
-            if($exam->getIsRandomExam()) {
+            if ($exam->getIsRandomExam()) {
                 return $this->redirect($this->generateUrl('addStudentsToExam', array('examId' => $exam->getId())));
             } else {
                 return $this->redirect($this->generateUrl('addQuestionsToExam', array('examId' => $exam->getId())));
@@ -439,9 +450,9 @@ class QuizController extends AbstractController
 
         $questions = [];
 
-        if($userExam->getExam()->getIsRandomExam()) {
+        if ($userExam->getExam()->getIsRandomExam()) {
             $givenAnswers = $userExam->getGivenAnswers();
-            foreach($givenAnswers as $answer) {
+            foreach ($givenAnswers as $answer) {
                 if (!in_array($answer->getQuestion(), $questions)) {
                     array_push($questions, $answer->getQuestion());
                 }
@@ -471,16 +482,27 @@ class QuizController extends AbstractController
         $availableExams = [];
 
         foreach ($userExams as $userExam) {
-            array_push($availableExams, $userExam->getExam());
+            $availableCategories = [];
+            foreach($userExam->getExam()->getOwner()->getQuestions() as $question) {
+                array_push($availableCategories, $question->getCategory());
+            }
+
+            if ($userExam->getExam()->getIsRandomExam() && $userExam->getExam()->getQuestions() == null) {
+                break;
+            } elseif (!in_array($userExam->getExam()->getCategory(), $availableCategories)) {
+                break;
+            } else {
+                array_push($availableExams, $userExam);
+            }
         }
 
         return $this->render('student/listAvailableExams.html.twig',
             array('activeUser' => $activeUser,
                 'categories' => $categories,
-                'userExams' => $userExams));
+                'userExams' => $availableExams));
     }
 
-    public function takeExam (Request $request, $userExamId)
+    public function takeExam(Request $request, $userExamId)
     {
         $activeUser = $this->getUser();
 
@@ -488,7 +510,7 @@ class QuizController extends AbstractController
 
         $chosenQuestions = [];
 
-        if($userExam->getExam()->getIsRandomExam()) {
+        if ($userExam->getExam()->getIsRandomExam()) {
             $allQuestions = $this->getDoctrine()->getRepository(Question::class)->findBy(array('category' => $userExam->getExam()->getCategory(), 'owner' => $userExam->getExam()->getOwner()));
 
             $max = mt_rand(1, sizeOf($allQuestions));
@@ -523,7 +545,7 @@ class QuizController extends AbstractController
                 }
             }
 
-            foreach($userExam->getGivenAnswers() as $answer) {
+            foreach ($userExam->getGivenAnswers() as $answer) {
                 $answer->addUserExam($userExam);
                 $entityManager->persist($answer);
             }
@@ -547,16 +569,17 @@ class QuizController extends AbstractController
             ));
     }
 
-    public function detailedExamResult($userExamId) {
+    public function detailedExamResult($userExamId)
+    {
         $activeUser = $this->getUser();
 
         $userExam = $this->getDoctrine()->getRepository(UserExam::class)->find($userExamId);
 
         $questions = [];
 
-        if($userExam->getExam()->getIsRandomExam()) {
+        if ($userExam->getExam()->getIsRandomExam()) {
             $givenAnswers = $userExam->getGivenAnswers();
-            foreach($givenAnswers as $answer) {
+            foreach ($givenAnswers as $answer) {
                 if (!in_array($answer->getQuestion(), $questions)) {
                     array_push($questions, $answer->getQuestion());
                 }

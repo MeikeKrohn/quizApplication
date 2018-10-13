@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ExamRepository")
@@ -165,6 +166,25 @@ class Exam
         $this->isRandomExam = $isRandomExam;
 
         return $this;
+    }
+
+    /**
+     * @Assert\IsTrue(message="You don't have questions in this category yet.")
+     */
+    public function hasQuestionsAvailable()
+    {
+        $questionsAvailable = false;
+        $questions = $this->getOwner()->getQuestions();
+
+        if ($this->getIsRandomExam()) {
+            foreach($questions as $question) {
+                if($question->getCategory() == $this->getCategory()) {
+                    $questionsAvailable = true;
+                }
+            }
+        }
+
+        return $questionsAvailable;
     }
 
 }
