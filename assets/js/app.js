@@ -13,34 +13,8 @@ require('../css/app.css');
 
 import axios from 'axios';
 
-var counter = 0.1;
-
-let deleteQuestionButton = document.querySelectorAll('.deleteQuestionButton');
-deleteQuestionButton.forEach(button => button.addEventListener('click', deleteQuestionButtonClicked));
-
 let deleteExamButton = document.querySelectorAll('.deleteExamButton');
 deleteExamButton.forEach(button => button.addEventListener('click', deleteExamButtonClicked));
-
-let addStudentsToExamButton = document.querySelectorAll('.addStudentsToExamButton');
-addStudentsToExamButton.forEach(button => button.addEventListener('click', addStudentsToExamButtonClicked));
-
-let submitExamButton = document.querySelectorAll('.submitExamButton');
-submitExamButton.forEach(button => button.addEventListener('click', submitExamButtonClicked));
-
-let deleteExistingAnswerButton = document.querySelectorAll('.deleteExistingAnswerButton');
-deleteExistingAnswerButton.forEach(button => button.addEventListener('click', deleteExistingAnswerButtonClicked));
-
-function deleteQuestionButtonClicked(event) {
-    const questionId = event.target.getAttribute('data-id');
-
-    var choice = confirm(this.getAttribute('data-confirm'));
-
-    if (choice) {
-        // send the HTTP REQ
-        axios.delete('/teacher/question/delete/' + questionId)
-            .then(response => location.reload());
-    }
-}
 
 function deleteExamButtonClicked(event) {
     const examId = event.target.getAttribute('data-id');
@@ -52,6 +26,9 @@ function deleteExamButtonClicked(event) {
             .then(response => location.reload());
     }
 }
+
+let addStudentsToExamButton = document.querySelectorAll('.addStudentsToExamButton');
+addStudentsToExamButton.forEach(button => button.addEventListener('click', addStudentsToExamButtonClicked));
 
 function addStudentsToExamButtonClicked(event) {
     const examId = document.getElementById('exam').getAttribute('data-id');
@@ -90,6 +67,9 @@ function sendEditRequestToServer(examId, assignedStudents) {
     }).then(response => location.reload())
 }
 
+let submitExamButton = document.querySelectorAll('.submitExamButton');
+submitExamButton.forEach(button => button.addEventListener('click', submitExamButtonClicked));
+
 function submitExamButtonClicked(event) {
     var userExamId = event.target.getAttribute('data-id');
     var allCheckBoxes = document.getElementsByClassName('selectAnswerCheckBoxActive');
@@ -115,8 +95,26 @@ function submitExamButtonClicked(event) {
 function sendSubmitExamRequestToServer(userExamId, givenAnswers) {
     axios.post('/student/takeExam/' + userExamId, {
         givenAnswers: givenAnswers
-    }).then(response => location.assign('/student/showResults'))
+    }).then(response => location.assign('/student/takeExam/result/' + userExamId))
 }
+
+let deleteQuestionButton = document.querySelectorAll('.deleteQuestionButton');
+deleteQuestionButton.forEach(button => button.addEventListener('click', deleteQuestionButtonClicked));
+
+function deleteQuestionButtonClicked(event) {
+    const questionId = event.target.getAttribute('data-id');
+
+    var choice = confirm(this.getAttribute('data-confirm'));
+
+    if (choice) {
+        // send the HTTP REQ
+        axios.delete('/teacher/question/delete/' + questionId)
+            .then(response => location.reload());
+    }
+}
+
+let deleteExistingAnswerButton = document.querySelectorAll('.deleteExistingAnswerButton');
+deleteExistingAnswerButton.forEach(button => button.addEventListener('click', deleteExistingAnswerButtonClicked));
 
 function deleteExistingAnswerButtonClicked(event) {
     event.preventDefault();
@@ -131,7 +129,6 @@ function deleteExistingAnswerButtonClicked(event) {
     }
 
 }
-
 
 var $collectionHolder;
 var $addAnswerButton = $('<button type="button" class="editAnswersButton">Add Answer</button>');

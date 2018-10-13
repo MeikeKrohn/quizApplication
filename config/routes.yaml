@@ -2,6 +2,12 @@ index:
     path: /
     controller: App\Controller\DefaultController::index
 
+login:
+  path: /login
+
+logout:
+  path: /logout
+
 home:
   path: /home
   controller: App\Controller\QuizController::home
@@ -56,18 +62,6 @@ addStudentsToExam:
   path: /teacher/exam/create/students/{examId}
   controller: App\Controller\QuizController::addStudentsToExam
 
-listAvailableExams:
-  path: /student/availableExams
-  controller: App\Controller\QuizController::listAvailableExams
-
-takeExam:
-  path: /student/takeExam/{userExamId}
-  controller: App\Controller\QuizController::takeExam
-
-showStudentResults:
-  path: /student/showResults
-  controller: App\Controller\QuizController::showStudentResults
-
 showTeacherResultsList:
   path: /teacher/showResults
   controller: App\Controller\QuizController::showTeacherResultsList
@@ -76,8 +70,18 @@ showTeacherDetailedResult:
   path: /teacher/showResult/{userExamId}
   controller: App\Controller\QuizController::showTeacherDetailedResult
 
-login:
-  path: /login
+listAvailableExams:
+  path: /student/availableExams
+  controller: App\Controller\QuizController::listAvailableExams
 
-logout:
-  path: /logout
+takeExam:
+  path: /student/takeExam/{userExamId}
+  controller: App\Controller\QuizController::takeExam
+
+detailedExamResult:
+  path: /student/takeExam/result/{userExamId}
+  controller: App\Controller\QuizController::detailedExamResult
+
+listStudentsResults:
+  path: /student/showResults
+  controller: App\Controller\QuizController::listStudentsResults

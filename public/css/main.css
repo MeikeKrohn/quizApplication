@@ -212,6 +212,15 @@ nav a:hover {
     font-size: 20px;
 }
 
+.annotation {
+    margin-left: 110px;
+    margin-top: -15px;
+    margin-bottom: 25px;
+    font-size: 12px;
+    color: var(--intense-blue);
+    font-weight: bold;
+}
+
 .dashboard {
     margin-left: 110px;
 }

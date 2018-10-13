@@ -2,17 +2,20 @@
 
 {% block content %}
     <div class="caption">
-        Result for {{ userExam.user.firstname }} {{ userExam.user.lastname }}
+        Your Result
     </div>
 
     <div class="actionFieldTopText">
         in {{ userExam.exam.name }}
     </div>
+    <div class="annotation">
+        (correct answers written in blue)
+    </div>
 
     <div class="editContentFrame">
 
         <div class="detailedResultDisplayResult">
-            Result: {{ userExam.result }}%
+            Your Result: {{ userExam.result }}%
         </div>
 
         {% if userExam.exam.isRandomExam and questions is defined %}
@@ -29,7 +32,7 @@
                                 <td>
                                     <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/>
                                 </td>
-                                <td style="{% if a.isCorrect %}font-weight: bold; color: #76C7F2; {% endif %} padding-left: 5px;" >
+                                <td style="{% if a.isCorrect %}font-weight: bold; color: #76C7F2; {% endif %} padding-left: 5px;">
                                     {{ a.answerText }}
                                 </td>
                             </tr>
@@ -52,7 +55,7 @@
                                 <td>
                                     <input type="checkbox" data-id="{{ a.id }}" class="selectAnswerCheckBoxPassive" {% if a in userExam.givenAnswers %} checked="checked" {% endif %}readonly/>
                                 </td>
-                                <td style="{% if a.isCorrect %}font-weight: bold; color: #76C7F2; {% endif %} padding-left: 5px;">
+                                <td style="{% if a.isCorrect %}font-weight: bold; color: #76C7F2; {% endif %} padding-left: 5px; ">
                                     {{ a.answerText }}
                                 </td>
                             </tr>
@@ -62,7 +65,7 @@
             {% endfor %}
 
         {% endif %}
-
+        <button class="orangeButton" data-id="{{ userExam.id }}" style="font-size: 12px" onclick="location.href='{{ path('listStudentsResults')}}'">Continue to Overview</button>
 
     </div>
 

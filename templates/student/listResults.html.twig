@@ -15,15 +15,21 @@
                     <tr>
                         <th style="width: 70%; height: 45px">Exam</th>
                         <th>Result</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for e in userExams %}
-                        {% if  e.exam.questions is not empty or e.exam.isRandomExam %}
-                            {% if c.id == e.exam.category.id %}
+                    {% for ue in userExams %}
+                        {% if  ue.exam.questions is not empty or ue.exam.isRandomExam %}
+                            {% if c.id == ue.exam.category.id %}
                                 <tr>
-                                    <td>{{ e.exam.name }}</td>
-                                    <td>{% if e.result is null %}N/A{% else %}{{ e.result }} %{% endif %}</td>
+                                    <td>{{ ue.exam.name }}</td>
+                                    <td>{% if ue.result is null %}N/A{% else %}{{ ue.result }} %{% endif %}</td>
+                                    {% if ue.result is not null %}
+                                        <td>
+                                            <input style="width: 80px" type="button" class="editButton" onclick="location.href='{{ path('detailedExamResult', {'userExamId': ue.id}) }}';" value="Details"/>
+                                        </td>
+                                    {% endif %}
                                 </tr>
                             {% endif %}
                         {% endif %}

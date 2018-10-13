@@ -400,13 +400,6 @@ class QuizController extends AbstractController
         return $input1->getId() - $input2->getId();
     }
 
-    public function compare_userExams($obj_a, $obj_b)
-    {
-        $a = $obj_a->getId();
-        $b = $obj_b->getId();
-        return $a - $b;
-    }
-
     public function deleteExam($examId)
     {
         $exam = $this->getDoctrine()->getRepository(Exam::class)->find($examId);
@@ -417,6 +410,50 @@ class QuizController extends AbstractController
 
         return new Response();
 
+    }
+
+    public function showTeacherResultsList()
+    {
+        $activeUser = $this->getUser();
+
+        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+
+        $exams = $this->getDoctrine()->getRepository(Exam::class)->findBy(array('owner' => $activeUser));
+
+        $userExams = $this->getDoctrine()->getRepository(UserExam::class)->findAll();
+
+        return $this->render('teacher/showResultsOverview.html.twig',
+            array(
+                'activeUser' => $activeUser,
+                'categories' => $categories,
+                'exams' => $exams,
+                'userExams' => $userExams
+            ));
+    }
+
+    public function showTeacherDetailedResult($userExamId)
+    {
+        $activeUser = $this->getUser();
+
+        $userExam = $this->getDoctrine()->getRepository(UserExam::class)->find($userExamId);
+
+        $questions = [];
+
+        if($userExam->getExam()->getIsRandomExam()) {
+            $givenAnswers = $userExam->getGivenAnswers();
+            foreach($givenAnswers as $answer) {
+                if (!in_array($answer->getQuestion(), $questions)) {
+                    array_push($questions, $answer->getQuestion());
+                }
+            }
+        }
+
+        return $this->render('teacher/showDetailedResult.html.twig',
+            array(
+                'activeUser' => $activeUser,
+                'userExam' => $userExam,
+                'questions' => $questions
+            ));
     }
 
     public function listAvailableExams()
@@ -443,7 +480,7 @@ class QuizController extends AbstractController
                 'userExams' => $userExams));
     }
 
-    public function takeExam(Request $request, $userExamId)
+    public function takeExam (Request $request, $userExamId)
     {
         $activeUser = $this->getUser();
 
@@ -511,43 +548,7 @@ class QuizController extends AbstractController
             ));
     }
 
-    public function showStudentResults()
-    {
-        $activeUser = $this->getUser();
-
-        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
-
-        $userExams = $this->getDoctrine()->getRepository(UserExam::class)->findBy(array('user' => $activeUser));
-
-        return $this->render('student/showResults.html.twig',
-            array(
-                'activeUser' => $activeUser,
-                'categories' => $categories,
-                'userExams' => $userExams
-            ));
-    }
-
-    public function showTeacherResultsList()
-    {
-        $activeUser = $this->getUser();
-
-        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
-
-        $exams = $this->getDoctrine()->getRepository(Exam::class)->findBy(array('owner' => $activeUser));
-
-        $userExams = $this->getDoctrine()->getRepository(UserExam::class)->findAll();
-
-        return $this->render('teacher/showResultsOverview.html.twig',
-            array(
-                'activeUser' => $activeUser,
-                'categories' => $categories,
-                'exams' => $exams,
-                'userExams' => $userExams
-            ));
-    }
-
-    public function showTeacherDetailedResult($userExamId)
-    {
+    public function detailedExamResult($userExamId) {
         $activeUser = $this->getUser();
 
         $userExam = $this->getDoctrine()->getRepository(UserExam::class)->find($userExamId);
@@ -563,11 +564,29 @@ class QuizController extends AbstractController
             }
         }
 
-        return $this->render('teacher/showDetailedResult.html.twig',
+
+        return $this->render('student/detailedExamResult.html.twig',
             array(
                 'activeUser' => $activeUser,
                 'userExam' => $userExam,
                 'questions' => $questions
             ));
     }
+
+    public function listStudentsResults()
+    {
+        $activeUser = $this->getUser();
+
+        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+
+        $userExams = $this->getDoctrine()->getRepository(UserExam::class)->findBy(array('user' => $activeUser));
+
+        return $this->render('student/listResults.html.twig',
+            array(
+                'activeUser' => $activeUser,
+                'categories' => $categories,
+                'userExams' => $userExams
+            ));
+    }
+
 }

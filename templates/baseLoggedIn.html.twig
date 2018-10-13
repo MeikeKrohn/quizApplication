@@ -8,7 +8,7 @@
                 <ul>
                     {% if activeUser.role == 'ROLE_STUDENT' %}
                         <li><a href="{{ path('listAvailableExams') }}">Available Exams</a></li>
-                        <li><a href="{{ path('showStudentResults') }}">Completed Exams</a></li>
+                        <li><a href="{{ path('listStudentsResults') }}">Completed Exams</a></li>
                     {% else %}
                         <li><a href="{{ path('listQuestions') }}">Questions</a></li>
                         <li><a href="{{ path('listExams') }}">Exams</a></li>
