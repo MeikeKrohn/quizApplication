@@ -23,71 +23,43 @@ class quizAppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $dummyStudent1 = new User();
-        $dummyStudent1->setEmail('meike@dummy.com');
-        $dummyStudent1->setFirstname('Meike');
-        $dummyStudent1->setLastname('Krohn');
-        $dummyStudent1->setRole('ROLE_STUDENT');
-        $dummyStudent1->setPassword(password_hash('test', PASSWORD_BCRYPT));
-        $dummyStudent1->setUsername('meike1401');
-        $manager->persist($dummyStudent1);
+        $firstnames = ['James', 'John', 'Michael', 'David', 'Thomas', 'Matthew', 'Mary', 'Patricia', 'Jennifer', 'Elizabeth', 'Susan', 'Jessica'];
 
-        $dummyStudent2 = new User();
-        $dummyStudent2->setEmail('lisa@dummy.com');
-        $dummyStudent2->setFirstname('Lisa');
-        $dummyStudent2->setLastname('Simpson');
-        $dummyStudent2->setRole('ROLE_STUDENT');
-        $dummyStudent2->setPassword(password_hash('test', PASSWORD_BCRYPT));
-        $dummyStudent2->setUsername('lisa2000');
-        $manager->persist($dummyStudent2);
+        $lastnames = ['Smith', 'Young', 'Stewart', 'Sanchez', 'Morris', 'Rogers', 'Miller', 'Davis', 'Taylor', 'Anderson', 'Thomas', 'Adams'];
 
-        $dummyStudent3 = new User();
-        $dummyStudent3->setEmail('tom@dummy.com');
-        $dummyStudent3->setFirstname('Tom');
-        $dummyStudent3->setLastname('Tiger');
-        $dummyStudent3->setRole('ROLE_STUDENT');
-        $dummyStudent3->setPassword(password_hash('test', PASSWORD_BCRYPT));
-        $dummyStudent3->setUsername('tom0007');
-        $manager->persist($dummyStudent3);
+        $usernameEndings = ['0001', '0002', '0003', '0004', '0005', '0006', '0007', '0008', '0009', '0010', '0011', '0012'];
 
-        $dummyStudent4 = new User();
-        $dummyStudent4->setEmail('frank@dummy.com');
-        $dummyStudent4->setFirstname('Frank');
-        $dummyStudent4->setLastname('Flowers');
-        $dummyStudent4->setRole('ROLE_STUDENT');
-        $dummyStudent4->setPassword(password_hash('test', PASSWORD_BCRYPT));
-        $dummyStudent4->setUsername('frank3333');
-        $manager->persist($dummyStudent4);
+        for ($i = 0; $i < 3; $i++) {
+            $dummyTeacher = new User();
+            $dummyTeacher->setFirstname($firstnames[$i]);
+            $dummyTeacher->setLastname($lastnames[$i]);
+            $dummyTeacher->setUsername($firstnames[$i] . $usernameEndings[$i]);
+            $dummyTeacher->setEmail($firstnames[$i] . $usernameEndings[$i] . '@examit.com');
+            $dummyTeacher->setRole('ROLE_TEACHER');
+            $dummyTeacher->setPassword(password_hash('test', PASSWORD_BCRYPT));
+            $manager->persist($dummyTeacher);
+        }
 
-        $dummyTeacher1 = new User();
-        $dummyTeacher1->setEmail('hans@dummy.com');
-        $dummyTeacher1->setFirstname('Hans');
-        $dummyTeacher1->setLastname('Hansson');
-        $dummyTeacher1->setRole('ROLE_TEACHER');
-        $dummyTeacher1->setPassword(password_hash('test', PASSWORD_BCRYPT));
-        $dummyTeacher1->setUsername('hans1001');
-        $manager->persist($dummyTeacher1);
+        for ($i = 4; $i < 12; $i++) {
+            $dummyStudent = new User();
+            $dummyStudent->setFirstname($firstnames[$i]);
+            $dummyStudent->setLastname($lastnames[$i]);
+            $dummyStudent->setUsername($firstnames[$i] . $usernameEndings[$i]);
+            $dummyStudent->setEmail($firstnames[$i] . $usernameEndings[$i] . '@examit.com');
+            $dummyStudent->setRole('ROLE_STUDENT');
+            $dummyStudent->setPassword(password_hash('test', PASSWORD_BCRYPT));
+            $manager->persist($dummyStudent);
+        }
 
-        $dummyTeacher2 = new User();
-        $dummyTeacher2->setEmail('claudia@dummy.com');
-        $dummyTeacher2->setFirstname('Claudia');
-        $dummyTeacher2->setLastname('Carlson');
-        $dummyTeacher2->setRole('ROLE_TEACHER');
-        $dummyTeacher2->setPassword(password_hash('test', PASSWORD_BCRYPT));
-        $dummyTeacher2->setUsername('claudia5050');
-        $manager->persist($dummyTeacher2);
 
-        $category1 = new Category();
-        $category1->setName("History");
-        $manager->persist($category1);
+        $categoryNames = ['History', 'Biology', 'Music', 'Chemistry', 'Religion'];
 
-        $category2 = new Category();
-        $category2->setName("Biology");
-        $manager->persist($category2);
+        for($i = 0; $i < sizeOf($categoryNames); $i++) {
+            $dummyCategory = new Category();
+            $dummyCategory->setName($categoryNames[$i]);
+            $manager->persist($dummyCategory);
+        }
 
-        $category3 = new Category();
-        $category3->setName("Geology");
-        $manager->persist($category3);
 
         $manager->flush();
     }
