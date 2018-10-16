@@ -179,4 +179,23 @@ class Question
 
         return $hasTrueAnswer;
     }
+
+    /**
+     * @Assert\IsTrue(message="You have the same answer twice.")
+     */
+    public function hasIndividualAnswers()
+    {
+        $hasIndividualAnswer = false;
+        $answerTexts = [];
+
+        foreach($this->getAnswers() as $answer) {
+            array_push($answerTexts, strtolower($answer->getAnswerText()));
+        }
+
+        if(sizeof(array_unique($answerTexts)) == sizeof($answerTexts)) {
+            $hasIndividualAnswer = true;
+        }
+
+        return $hasIndividualAnswer;
+    }
 }
