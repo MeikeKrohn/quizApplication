@@ -748,11 +748,33 @@ class QuizController extends AbstractController
 
         $userExams = $this->getDoctrine()->getRepository(UserExam::class)->findBy(array('user' => $activeUser));
 
+        // Filter those userExams for the Student, that the user can actually do
+        // (don't add Exams which are non-random and contain no questions or are
+        // random but the owner does not have questions for the exam's category)
+        $availableExams = [];
+        foreach ($userExams as $userExam) {
+
+            // Define and array containing all the categories for which the Owner of an Exam (and UserExam)
+            // has Questions available
+            $availableCategories = [];
+            foreach ($userExam->getExam()->getOwner()->getQuestions() as $question) {
+                array_push($availableCategories, $question->getCategory());
+            }
+
+            if (!$userExam->getExam()->getIsRandomExam() && sizeof($userExam->getExam()->getQuestions()) == 0) {
+                break;
+            } elseif (!in_array($userExam->getExam()->getCategory(), $availableCategories)) {
+                break;
+            } else {
+                array_push($availableExams, $userExam);
+            }
+        }
+
         return $this->render('student/listResults.html.twig',
             array(
                 'activeUser' => $activeUser,
                 'categories' => $categories,
-                'userExams' => $userExams
+                'userExams' => $availableExams
             ));
     }
 
