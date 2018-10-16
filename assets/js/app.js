@@ -1,10 +1,3 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
 // any CSS you require will output into a single css file (app.css in this case)
 require('../css/app.css');
 
@@ -13,6 +6,7 @@ require('../css/app.css');
 
 import axios from 'axios';
 
+// Select all Delete-Buttons on the listExams page and add EventListeners to them
 let deleteExamButton = document.querySelectorAll('.deleteExamButton');
 deleteExamButton.forEach(button => button.addEventListener('click', deleteExamButtonClicked));
 
@@ -27,20 +21,27 @@ function deleteExamButtonClicked(event) {
     }
 }
 
+// Add an EventListener to the SubmitButton on the AddStudentsToExam page (during Exam creation and editing)
 let addStudentsToExamButton = document.querySelectorAll('.addStudentsToExamButton');
 addStudentsToExamButton.forEach(button => button.addEventListener('click', addStudentsToExamButtonClicked));
 
 function addStudentsToExamButtonClicked(event) {
     const examId = document.getElementById('exam').getAttribute('data-id');
-    const allCheckBoxes = document.getElementsByClassName('selectStudentCheckBox');
-    const checkedCheckBoxes = [];
 
+    // Define array with all CheckBoxes on the page (one for each Student in the database)
+    const allCheckBoxes = document.getElementsByClassName('selectStudentCheckBox');
+
+    // Create an Array that contains the Students that have been checked by the activeUser/Teacher
+    // and shall be assigned to the Exam
+    const checkedCheckBoxes = [];
     if (allCheckBoxes.length > 0) {
         for (let i = 0; i < allCheckBoxes.length; i++) {
             if (allCheckBoxes[i].checked) {
                 checkedCheckBoxes.push(parseInt(allCheckBoxes[i].getAttribute('data-id')));
             }
 
+            // Warn if the activeUser/Teacher selected no student,
+            // or call the Method to create a new Request
             if (allCheckBoxes.length - 1 === i) {
                 if (checkedCheckBoxes.length == 0) {
                     event.preventDefault();
@@ -67,24 +68,30 @@ function sendEditRequestToServer(examId, assignedStudents) {
     }).then(response => location.reload())
 }
 
+// Add an EventListener to the SubmitExamButton on the page where the Student takes an Exam
 let submitExamButton = document.querySelectorAll('.submitExamButton');
 submitExamButton.forEach(button => button.addEventListener('click', submitExamButtonClicked));
 
 function submitExamButtonClicked(event) {
     var userExamId = event.target.getAttribute('data-id');
+
     var allCheckBoxes = document.getElementsByClassName('selectAnswerCheckBoxActive');
 
+    // Define a multidimensional array containing each answers id
+    // and the information whether the answer was chosen by the Student
     var givenAnswers = [];
-
     if (allCheckBoxes.length > 0) {
         for (let i = 0; i < allCheckBoxes.length; i++) {
             var answerId = parseInt(allCheckBoxes[i].getAttribute('data-id'));
+
             var isChecked = allCheckBoxes[i].checked;
 
             var answer = {'answerId': answerId, 'isChecked': isChecked};
 
             givenAnswers.push(answer);
 
+            // Call the method to send the actual Request to the server
+            // when the last position in the allCheckBoxes-Array is reached
             if (allCheckBoxes.length - 1 === i) {
                 sendSubmitExamRequestToServer(userExamId, givenAnswers);
             }
@@ -98,6 +105,7 @@ function sendSubmitExamRequestToServer(userExamId, givenAnswers) {
     }).then(response => location.assign('/student/takeExam/result/' + userExamId))
 }
 
+// Select all Delete-Buttons on the listQuestions page and add EventListeners to them
 let deleteQuestionButton = document.querySelectorAll('.deleteQuestionButton');
 deleteQuestionButton.forEach(button => button.addEventListener('click', deleteQuestionButtonClicked));
 
@@ -107,19 +115,18 @@ function deleteQuestionButtonClicked(event) {
     var choice = confirm(this.getAttribute('data-confirm'));
 
     if (choice) {
-        // send the HTTP REQ
         axios.delete('/teacher/question/delete/' + questionId)
             .then(response => location.reload());
     }
 }
 
+// Select all Delete-Buttons on the EditQuestion-page and add EventListeners to them
 let deleteExistingAnswerButton = document.querySelectorAll('.deleteExistingAnswerButton');
 deleteExistingAnswerButton.forEach(button => button.addEventListener('click', deleteExistingAnswerButtonClicked));
 
 function deleteExistingAnswerButtonClicked(event) {
     event.preventDefault();
     const answerId = event.target.getAttribute('data-id');
-
 
     var choice = confirm(this.getAttribute('data-confirm'));
 
@@ -135,28 +142,30 @@ var $addAnswerButton = $('<button type="button" class="editAnswersButton">Add An
 var $newLinkLi = $('<li></li>').append($addAnswerButton);
 
 jQuery(document).ready(function () {
-    // Get the ul that holds the collection of tags
+    // Get the ul-element that holds the collection of answers
     $collectionHolder = $('ul.answers');
 
+    // Call the addAnswerFormDeleteLink function for each li-element in the ul
     $collectionHolder.find('li').each(function () {
         addAnswerFormDeleteLink($(this));
     });
 
-    // add the "Add Answer" anchor and li to the tags ul
+    // Add the "Add Answer" anchor and li to the ul with the answers
     $collectionHolder.append($newLinkLi);
 
-    // count the current form inputs we have (e.g. 2), use that as the new
-    // index when inserting a new item (e.g. 2)
+    // Count the current form inputs and use that as the new
+    // index when inserting a new item
     $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
     $addAnswerButton.on('click', function (e) {
-        // add a new tag form (see next code block)
+        // Add a new answer form
         addAnswerForm($collectionHolder, $newLinkLi);
     });
 });
 
 function addAnswerForm($collectionHolder, $newLinkLi) {
-    // Get the data-prototype explained earlier
+    // Get the data-prototype
+    // (which allows to add new answer forms to the template)
     var prototype = $collectionHolder.data('prototype');
 
     // get the new index
@@ -164,9 +173,7 @@ function addAnswerForm($collectionHolder, $newLinkLi) {
 
     var newForm = prototype;
 
-    newForm = newForm.replace(/__name__/g, index);
-
-    // increase the index with one for the next item
+    // increase the index by one for the next item
     $collectionHolder.data('index', index + 1);
 
     // Display the form in the page in an li, before the "Add Answer" link li
@@ -191,11 +198,10 @@ var $category = $('#exam_category');
 var $questions = $('#exam_questions');
 var $name = $('#exam_name');
 
-// When sport gets selected ...
+// Define what happens when a category gets selected
 $category.change(function () {
-    console.log("something changed");
 
-    // ... retrieve the corresponding form.
+    // Retrieve the corresponding form.
     var $form = $(this).closest('form');
 
     // Simulate form data, but only include the selected sport value.
@@ -210,12 +216,11 @@ $category.change(function () {
         type: $form.attr('method'),
         data: data,
         success: function (html) {
-            // Replace current position field ...
+            // Replace current question field ...
             $('#exam_questions').replaceWith(
                 // ... with the returned one from the AJAX response.
                 $(html).find('#exam_questions')
             );
-            // Position field now displays the appropriate positions.
         }
     });
 });
